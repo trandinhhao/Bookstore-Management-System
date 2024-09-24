@@ -11,4 +11,15 @@
         <maven.compiler.target>22</maven.compiler.target>
         <exec.mainClass>java.bms.MainClass</exec.mainClass>
     </properties>
+    
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+
+    </dependencies>
+    
 </project>
