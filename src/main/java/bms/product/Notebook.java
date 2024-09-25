@@ -6,8 +6,8 @@ public class Notebook extends Product {
     private String size;
     private String manufacturer;
 
-    public Notebook(int pageCount, String paperType, String size, String manufacturer, String id, String name, double costPrice, double salePrice, int quantity, String category, String origin) {
-        super(id, name, costPrice, salePrice, quantity, category, origin);
+    public Notebook(int pageCount, String paperType, String size, String manufacturer, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
+        super(id, name, costPrice, salePrice, quantity, unit, origin);
         this.pageCount = pageCount;
         this.paperType = paperType;
         this.size = size;
