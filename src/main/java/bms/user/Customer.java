@@ -13,5 +13,4 @@ public class Customer extends Person{
         this.membershipTier = membershipTier;
         this.discount = discount;
     }
-    
 }
