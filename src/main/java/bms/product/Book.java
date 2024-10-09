@@ -63,13 +63,12 @@ public class Book extends Product {
         }
     }
 
-    public void updateBook(String id) {
+    public void updateBook(String col, String val, String id) {
         try {
             Connection con = ConnectMySQL.getConnection();
-            PreparedStatement stmt = con.prepareStatement("UPDATE Book SET ? = ? WHERE id = ?");
-            stmt.setString(1, null);
-            stmt.setString(2, null);
-            stmt.setString(3, id);
+            PreparedStatement stmt = con.prepareStatement("UPDATE Book SET " + col + " = ? WHERE id = ?");
+            stmt.setString(1, val);
+            stmt.setString(2, id);
             // Bam xac nhan update
             int row = stmt.executeUpdate();
             if (row > 0) {
