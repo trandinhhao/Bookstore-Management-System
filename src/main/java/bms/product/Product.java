@@ -18,5 +18,4 @@ public class Product {
         this.unit = unit;
         this.origin = origin;
     }
-    
 }

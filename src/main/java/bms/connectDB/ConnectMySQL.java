@@ -7,10 +7,9 @@ public class ConnectMySQL {
     private static String username = "root";
     private static String password = "123456";
 
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    public static Connection getConnection() throws SQLException {
         //Nap Driver
-        Class.forName("com.mysql.jdbc.Driver");
-        return (Connection) DriverManager.getConnection(url, username, password);
+        return DriverManager.getConnection(url, username, password);
     }
 
 //    public static void main(String[] args) throws ClassNotFoundException, SQLException {
