@@ -9,18 +9,26 @@ public class Gift extends Product {
     private String type;
     private String material;
 
-    public Gift(String type, String material, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
+    public Gift(String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin,
+                String type, String material) {
         super(id, name, costPrice, salePrice, quantity, unit, origin);
         this.type = type;
         this.material = material;
     }
 
-    // Them mot mon qua vao co so du lieu
-    public void addGift(String type, String material, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
-        try {
-            Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de them du lieu vao bang Gift
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO Gift VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?)");
+    // Getter methods
+    public String getType() {
+        return type;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    // Thêm một món quà vào cơ sở dữ liệu
+    public void addGift() {
+        try (Connection con = ConnectMySQL.getConnection()) {
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO Gift VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             stmt.setString(1, id);
             stmt.setString(2, name);
             stmt.setDouble(3, costPrice);
@@ -31,50 +39,46 @@ public class Gift extends Product {
             stmt.setString(8, type);
             stmt.setString(9, material);
 
-            // Bam xac nhan nhap
+            // Xác nhận nhập
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao nhap thanh cong, hien thi ra thong bao them thanh cong
+                System.out.println("Thêm món quà thành công!"); // Hoặc hiển thị thông báo cho người dùng
             }
         } catch (Exception e) {
-            // Thong bao nhap du lieu khong hop le, yeu cau nhap lai
+            System.out.println("Có lỗi xảy ra khi thêm món quà: " + e.getMessage());
         }
     }
 
-    // Xoa mot mon qua khoi co so du lieu
+    // Xóa một món quà khỏi cơ sở dữ liệu
     public void deleteGift(String id) {
-        try {
-            Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de xoa du lieu trong bang Gift
+        try (Connection con = ConnectMySQL.getConnection()) {
             PreparedStatement stmt = con.prepareStatement("DELETE FROM Gift WHERE id = ?");
             stmt.setString(1, id);
 
-            // Bam xac nhan xoa
+            // Xác nhận xóa
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao da xoa thanh cong, hien thi ra thong bao xoa thanh cong
+                System.out.println("Xóa món quà thành công!"); // Hoặc hiển thị thông báo cho người dùng
             }
         } catch (Exception e) {
-            // Thong bao xoa khong thanh cong, yeu cau nhap lai id
+            System.out.println("Có lỗi xảy ra khi xóa món quà: " + e.getMessage());
         }
     }
 
-    // Cap nhat thong tin mot mon qua trong co so du lieu
+    // Cập nhật thông tin một món quà trong cơ sở dữ liệu
     public void updateGift(String col, String val, String id) {
-        try {
-            Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de cap nhat du lieu trong bang Gift
+        try (Connection con = ConnectMySQL.getConnection()) {
             PreparedStatement stmt = con.prepareStatement("UPDATE Gift SET " + col + " = ? WHERE id = ?");
             stmt.setString(1, val);
             stmt.setString(2, id);
 
-            // Bam xac nhan cap nhat
+            // Xác nhận cập nhật
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao cap nhat thanh cong, hien thi ra thong bao cap nhat thanh cong
+                System.out.println("Cập nhật món quà thành công!"); // Hoặc hiển thị thông báo cho người dùng
             }
         } catch (Exception e) {
-            // Thong bao cap nhat khong thanh cong, yeu cau nhap lai thong tin
+            System.out.println("Có lỗi xảy ra khi cập nhật món quà: " + e.getMessage());
         }
     }
 }

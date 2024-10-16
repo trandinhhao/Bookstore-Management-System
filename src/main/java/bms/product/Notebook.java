@@ -10,7 +10,8 @@ public class Notebook extends Product {
     private String size;
     private String manufacturer;
 
-    public Notebook(int pageCount, String paperType, String size, String manufacturer, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
+    public Notebook(int pageCount, String paperType, String size, String manufacturer, String id, String name,
+                    double costPrice, double salePrice, int quantity, String unit, String origin) {
         super(id, name, costPrice, salePrice, quantity, unit, origin);
         this.pageCount = pageCount;
         this.paperType = paperType;
@@ -18,11 +19,26 @@ public class Notebook extends Product {
         this.manufacturer = manufacturer;
     }
 
-    // Them mot cuon sach vao co so du lieu
-    public void addNotebook(int pageCount, String paperType, String size, String manufacturer, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
-        try {
-            Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de them du lieu vao bang Notebook
+    // Getter methods
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public String getPaperType() {
+        return paperType;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    // Thêm một cuốn sổ vào cơ sở dữ liệu
+    public void addNotebook() {
+        try (Connection con = ConnectMySQL.getConnection()) {
             PreparedStatement stmt = con.prepareStatement("INSERT INTO Notebook VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             stmt.setString(1, id);
             stmt.setString(2, name);
@@ -36,50 +52,46 @@ public class Notebook extends Product {
             stmt.setString(10, size);
             stmt.setString(11, manufacturer);
 
-            // Bam xac nhan nhap
+            // Xác nhận nhập
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao nhap thanh cong, hien thi ra thong bao them thanh cong
+                System.out.println("Thêm cuốn sổ thành công!"); // Hoặc hiển thị thông báo cho người dùng
             }
         } catch (Exception e) {
-            // Thong bao nhap du lieu khong hop le, yeu cau nhap lai
+            System.out.println("Có lỗi xảy ra khi thêm cuốn sổ: " + e.getMessage());
         }
     }
 
-    // Xoa mot cuon sach khoi co so du lieu
+    // Xóa một cuốn sổ khỏi cơ sở dữ liệu
     public void deleteNotebook(String id) {
-        try {
-            Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de xoa du lieu trong bang Notebook
+        try (Connection con = ConnectMySQL.getConnection()) {
             PreparedStatement stmt = con.prepareStatement("DELETE FROM Notebook WHERE id = ?");
             stmt.setString(1, id);
 
-            // Bam xac nhan xoa
+            // Xác nhận xóa
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao da xoa thanh cong, hien thi ra thong bao xoa thanh cong
+                System.out.println("Xóa cuốn sổ thành công!"); // Hoặc hiển thị thông báo cho người dùng
             }
         } catch (Exception e) {
-            // Thong bao xoa khong thanh cong, yeu cau nhap lai id
+            System.out.println("Có lỗi xảy ra khi xóa cuốn sổ: " + e.getMessage());
         }
     }
 
-    // Cap nhat thong tin mot cuon sach trong co so du lieu
+    // Cập nhật thông tin một cuốn sổ trong cơ sở dữ liệu
     public void updateNotebook(String col, String val, String id) {
-        try {
-            Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de cap nhat du lieu trong bang Notebook
+        try (Connection con = ConnectMySQL.getConnection()) {
             PreparedStatement stmt = con.prepareStatement("UPDATE Notebook SET " + col + " = ? WHERE id = ?");
             stmt.setString(1, val);
             stmt.setString(2, id);
 
-            // Bam xac nhan cap nhat
+            // Xác nhận cập nhật
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao cap nhat thanh cong, hien thi ra thong bao cap nhat thanh cong
+                System.out.println("Cập nhật cuốn sổ thành công!"); // Hoặc hiển thị thông báo cho người dùng
             }
         } catch (Exception e) {
-            // Thong bao cap nhat khong thanh cong, yeu cau nhap lai thong tin
+            System.out.println("Có lỗi xảy ra khi cập nhật cuốn sổ: " + e.getMessage());
         }
     }
 }

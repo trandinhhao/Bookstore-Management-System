@@ -17,11 +17,11 @@ public class Toy extends Product {
         this.material = material;
     }
 
-    // Them mot do choi vao co so du lieu
+    // Thêm một đồ chơi vào cơ sở dữ liệu
     public void addToy(String type, String ageRange, String material, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
         try {
             Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de them du lieu vao bang Toy
+            // Chuẩn bị câu lệnh SQL để thêm dữ liệu vào bảng Toy
             PreparedStatement stmt = con.prepareStatement("INSERT INTO Toy VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?)");
             stmt.setString(1, id);
             stmt.setString(2, name);
@@ -34,50 +34,53 @@ public class Toy extends Product {
             stmt.setString(9, ageRange);
             stmt.setString(10, material);
 
-            // Bam xac nhan nhap
+            // Xác nhận nhập
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao nhap thanh cong, hien thi ra thong bao them thanh cong
+                System.out.println("Thêm đồ chơi thành công.");
             }
         } catch (Exception e) {
-            // Thong bao nhap du lieu khong hop le, yeu cau nhap lai
+            e.printStackTrace();
+            System.out.println("Có lỗi xảy ra trong quá trình thêm đồ chơi. Vui lòng kiểm tra lại.");
         }
     }
 
-    // Xoa mot do choi khoi co so du lieu
+    // Xóa một đồ chơi khỏi cơ sở dữ liệu
     public void deleteToy(String id) {
         try {
             Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de xoa du lieu trong bang Toy
+            // Chuẩn bị câu lệnh SQL để xóa dữ liệu trong bảng Toy
             PreparedStatement stmt = con.prepareStatement("DELETE FROM Toy WHERE id = ?");
             stmt.setString(1, id);
 
-            // Bam xac nhan xoa
+            // Xác nhận xóa
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao da xoa thanh cong, hien thi ra thong bao xoa thanh cong
+                System.out.println("Xóa đồ chơi thành công.");
             }
         } catch (Exception e) {
-            // Thong bao xoa khong thanh cong, yeu cau nhap lai id
+            e.printStackTrace();
+            System.out.println("Có lỗi xảy ra trong quá trình xóa đồ chơi. Vui lòng kiểm tra lại ID.");
         }
     }
 
-    // Cap nhat thong tin mot do choi trong co so du lieu
+    // Cập nhật thông tin một đồ chơi trong cơ sở dữ liệu
     public void updateToy(String col, String val, String id) {
         try {
             Connection con = ConnectMySQL.getConnection();
-            // Chuan bi cau lenh SQL de cap nhat du lieu trong bang Toy
+            // Chuẩn bị câu lệnh SQL để cập nhật dữ liệu trong bảng Toy
             PreparedStatement stmt = con.prepareStatement("UPDATE Toy SET " + col + " = ? WHERE id = ?");
             stmt.setString(1, val);
             stmt.setString(2, id);
 
-            // Bam xac nhan cap nhat
+            // Xác nhận cập nhật
             int row = stmt.executeUpdate();
             if (row > 0) {
-                // Thong bao cap nhat thanh cong, hien thi ra thong bao cap nhat thanh cong
+                System.out.println("Cập nhật đồ chơi thành công.");
             }
         } catch (Exception e) {
-            // Thong bao cap nhat khong thanh cong, yeu cau nhap lai thong tin
+            e.printStackTrace();
+            System.out.println("Có lỗi xảy ra trong quá trình cập nhật đồ chơi. Vui lòng kiểm tra lại thông tin.");
         }
     }
 }

@@ -1,7 +1,6 @@
 package bms.product;
 
-public class Product {
-
+public abstract class Product {
     protected String id;
     protected String name;
     protected double costPrice;
@@ -20,12 +19,25 @@ public class Product {
         this.origin = origin;
     }
 
-    public String getId() {
-        return id;
-    }
+    // Getters và Setters
+    public String getCode() { return id; }
+    public void setCode(String id) { this.id = id; }
 
-    public double getSalePrice() {
-        return salePrice;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
+    public double getCostPrice() { return costPrice; }
+    public void setCostPrice(double costPrice) { this.costPrice = costPrice; }
+
+    public double getSalePrice() { return salePrice; }
+    public void setSalePrice(double salePrice) { this.salePrice = salePrice; }
+
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
+
+    public String getOrigin() { return origin; }
+    public void setOrigin(String origin) { this.origin = origin; }
 }
