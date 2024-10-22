@@ -1,95 +1,101 @@
-//package bms.system_management;
-//
-//import bms.product.Product;
-//import bms.connectDB.ConnectMySQL;
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.time.LocalDateTime;
-//import java.time.format.DateTimeFormatter;
-//import java.util.LinkedHashMap;
-//
-//public class Order {
-//
-//    private String id; // ID cua don hang
-//    private LinkedHashMap<Product, Integer> products; // San pham va so luong
-//    private double totalAmount; // Tong gia tri don hang
-//    private String date; // Ngay
-//    private String time; // Thoi gian
-//
-//    public Order(String id, LinkedHashMap<Product, Integer> products) {
-//        this.id = id;
+package bms.system_management;
+
+import bms.product.Product;
+import bms.connectDB.ConnectMySQL;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
+
+public class Order {
+
+    private int orderId;
+    private int customerId;
+//    private LinkedHashMap<Product, Integer> products;
+    private Date orderDate;
+    private double totalAmount;
+    private String status;
+
+    public Order(int orderId, int customerId, Date orderDate, double totalAmount, String status) {
+        this.orderId = orderId;
+        this.customerId = customerId;
 //        this.products = products;
-//        this.totalAmount = calculateTotalAmount(); // Tinh tong gia tri don hang
-//
-//        // Lay thoi gian hien tai
-//        LocalDateTime now = LocalDateTime.now();
-//
-//        // Dinh dang thoi gian va ngay thanh chuoi phu hop
-//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-//
-//        this.date = now.format(dateFormatter);  // Ngay dang chuoi "yyyy-MM-dd"
-//        this.time = now.format(timeFormatter);  // Thoi gian dang chuoi "HH:mm:ss"
-//    }
-//
-//    // Phuong thuc tinh tong gia tri don hang
-//    private double calculateTotalAmount() {
-//        double total = 0.0;
-//        for (Product product : products.keySet()) {
-//            total += product.getSalePrice * products.get(product); // Tinh tong dua tren gia ban va so luong
-//        }
-//        return total;
-//    }
-//
-//    // Phuong thuc de them don hang
-//    public boolean addOrder() {
-//        try {
-//            Connection con = ConnectMySQL.getConnection();
-//            con.setAutoCommit(false); // Bat dau transaction
-//
-//            // Kiem tra so luong ton kho cua tung san pham
-//            for (Product product : products.keySet()) {
-//                int orderQuantity = products.get(product);
-//
-//                // Kiem tra so luong ton kho
-//                PreparedStatement checkStmt = con.prepareStatement("SELECT quantity FROM Product WHERE id = ?");
-//                checkStmt.setString(1, product.getId());
-//                ResultSet rs = checkStmt.executeQuery();
-//                if (rs.next()) {
-//                    int currentQuantity = rs.getInt("quantity");
-//                    if (currentQuantity < orderQuantity) {
-//                        con.rollback(); // Rollback neu khong du hang
-//                        return false; // Khong the tao don hang do so luong khong du
-//                    }
-//                }
-//            }
-//
-//            // Giam so luong san pham trong kho va cap nhat CSDL
-//            for (Product product : products.keySet()) {
-//                int orderQuantity = products.get(product);
-//
-//                // Giam so luong trong kho
-//                PreparedStatement updateStmt = con.prepareStatement("UPDATE Product SET quantity = quantity - ? WHERE id = ?");
-//                updateStmt.setInt(1, orderQuantity);
-//                updateStmt.setString(2, product.getId());
-//                updateStmt.executeUpdate();
-//            }
-//
-//            // Them don hang vao CSDL
-//            PreparedStatement orderStmt = con.prepareStatement("INSERT INTO Orders (id, totalAmount, date, time) VALUES (?, ?, ?, ?)");
-//            orderStmt.setString(1, id);
-//            orderStmt.setDouble(2, totalAmount);
-//            orderStmt.setString(3, date);
-//            orderStmt.setString(4, time);
-//            orderStmt.executeUpdate();
-//
-//            // Commit transaction
-//            con.commit();
-//            return true;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false; // Tra ve false neu co loi xay ra
-//        }
-//    }
-//}
+        this.totalAmount = totalAmount;
+        this.orderDate = orderDate;
+        this.status = status;
+    }
+
+    public void addOrder() throws SQLException, ClassNotFoundException {
+        String sql = "INSERT INTO orders (customer_id, order_date, total_amount, status) VALUES (?, ?, ?, ?)";
+        Connection conn = ConnectMySQL.getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, this.customerId);
+            pstmt.setDate(2, new java.sql.Date(this.orderDate.getTime()));
+            pstmt.setDouble(3, this.totalAmount);
+            pstmt.setString(4, this.status);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public static Order getOrderById(int orderId) throws SQLException, ClassNotFoundException {
+        String sqlString = "SELECT * FROM orders WHERE order_id = ?";
+        Connection conn = ConnectMySQL.getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlString)) {
+            pstmt.setInt(1, orderId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Order(
+                            rs.getInt("order_id"),
+                            rs.getInt("customer_id"),
+                            rs.getDate("order_date"),
+                            rs.getDouble("total_amount"),
+                            rs.getString("status")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<Order> getAllOrders() throws SQLException, ClassNotFoundException {
+        ArrayList<Order> orders = new ArrayList<>();
+        String sqlString = "SELECT * FROM orders";
+        Connection conn = ConnectMySQL.getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlString)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                orders.add(new Order(
+                        rs.getInt("order_id"),
+                        rs.getInt("customer_id"),
+                        rs.getDate("order_date"),
+                        rs.getDouble("total_amount"),
+                        rs.getString("status")
+                ));
+            }
+        }
+        return null;
+    }
+
+    public void updateInDatabase() throws SQLException, ClassNotFoundException {
+        String sqlString = "UPDATE orders SET customer_id = ?, order_date = ?, total_amount = ?, status = ? WHERE order_id = ?";
+        Connection conn = ConnectMySQL.getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlString)) {
+            pstmt.setInt(1, this.orderId);
+            pstmt.setInt(2, this.customerId);
+            pstmt.setDate(3, new java.sql.Date(this.orderDate.getTime()));
+            pstmt.setDouble(4, this.totalAmount);
+            pstmt.setString(5, this.status);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public void deleteFromDatabase() throws SQLException, ClassNotFoundException {
+        Connection conn = ConnectMySQL.getConnection();
+        String sql = "DELETE FROM orders WHERE order_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, this.orderId);
+            pstmt.executeUpdate();
+        }
+    }
+}
