@@ -147,3 +147,207 @@ private JLabel createCircularAvatar() {
             return new JLabel("ADMIN");
         }
     }
+    
+   private JButton createMenuButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(menuFont);
+        button.setForeground(textColor);
+        button.setBackground(primaryColor);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setMaximumSize(new Dimension(180, 40));
+        button.setPreferredSize(new Dimension(180, 40));
+
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setIconTextGap(10);
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(hoverColor);
+                button.setContentAreaFilled(true);
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(primaryColor);
+                button.setContentAreaFilled(false);
+            }
+        });
+
+        return button;
+    }
+
+    private JPanel createEnhancedTablePanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        String[] columnNames = {"Mã SP", "Tên SP", "Giá nhập", "Giá bán",
+                "Số lượng", "Đơn vị tính", "Xuất xứ", "Nhà xuất bản", "Tác giả",
+                "Năm xuất bản", "Thể loại", "Ngôn ngữ"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(table);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        return panel;
+    }
+private JPanel createLeftMenu(JComboBox<String> categoryComboBox) {
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBackground(primaryColor);
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    JPanel adminPanel = new JPanel();
+    adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
+    adminPanel.setBackground(primaryColor);
+    adminPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+
+    JLabel avatarLabel = createCircularAvatar();
+    avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    adminPanel.add(avatarLabel);
+
+    JLabel adminLabel = new JLabel("ADMIN");
+    adminLabel.setFont(titleFont);
+    adminLabel.setForeground(textColor);
+    adminLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    adminPanel.add(Box.createVerticalStrut(10));
+    adminPanel.add(adminLabel);
+
+    JLabel idLabel = new JLabel("ID: ADMIN");
+    idLabel.setFont(menuFont);
+    idLabel.setForeground(textColor);
+    idLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    adminPanel.add(Box.createVerticalStrut(5));
+    adminPanel.add(idLabel);
+
+    panel.add(adminPanel);
+    panel.add(Box.createVerticalStrut(20));
+
+    String[] menuItems = {"Sản Phẩm", "Hóa Đơn", "Khách Hàng", "Nhân Viên", "Nhà Cung Cấp", "Thống Kê"};
+
+    for (String menuItem : menuItems) {
+        JButton btn = createMenuButton(menuItem);
+        if (menuItem.equals("Sản Phẩm")) {
+            btn.addActionListener(e -> {
+                String selectedCategory = (String) categoryComboBox.getSelectedItem();
+                if ("Sách".equals(selectedCategory)) {
+                    loadProductData("book");
+                } else if ("Quà lưu niệm".equals(selectedCategory)) {
+                    loadProductData("gift");
+                }
+            });
+        }
+        panel.add(btn);
+        panel.add(Box.createVerticalStrut(10));
+    }
+
+    return panel;
+}
+
+private JPanel createEnhancedInputForm() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Thiết lập các trường nhập liệu
+        addFormField(panel, gbc, 0, 0, "Mã sản phẩm:", new JTextField(10));
+        addFormField(panel, gbc, 0, 1, "Tên sản phẩm:", new JTextField(10));
+        addFormField(panel, gbc, 0, 2, "Giá nhập:", new JTextField(10));
+        addFormField(panel, gbc, 0, 3, "Số lượng:", new JTextField(10));
+
+        // Cột 2
+        String[] categories = {"Sách", "Quà lưu niệm", "Vở", "Sản phẩm", "Dụng cụ học tập", "Sách giáo khoa"};
+        
+        String[] suppliers = {"NXB Kim Đồng"};
+        addFormField(panel, gbc, 2, 0, "Nhà cung cấp:", new JComboBox<>(suppliers));
+
+        addFormField(panel, gbc, 2, 1, "Đơn giá:", new JTextField(10));
+
+        // Date field with button
+        JPanel datePanel = new JPanel(new BorderLayout());
+        JTextField dateField = new JTextField(new SimpleDateFormat("dd/MM/yyyy").format(new Date()), 8);
+        JButton dateButton = new JButton("...");
+        datePanel.add(dateField, BorderLayout.CENTER);
+        datePanel.add(dateButton, BorderLayout.EAST);
+        addFormField(panel, gbc, 2, 3, "Ngày nhập:", datePanel);
+        
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.gridheight = 5;
+        // Buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        buttonPanel.add(new JButton("Hủy"));
+        buttonPanel.add(new JButton("Sửa"));
+        buttonPanel.add(new JButton("Làm mới"));
+        buttonPanel.add(new JButton("Lưu"));
+
+        gbc.gridx = 5;
+        gbc.gridy = 0;
+        panel.add(buttonPanel, gbc);
+        JComboBox<String> categoryComboBox = new JComboBox<>(categories);
+        addFormField(panel, gbc, 2, 1, "Loại sản phẩm:", categoryComboBox);
+
+// Thêm ActionListener để thay đổi bảng dựa trên lựa chọn loại sản phẩm
+        categoryComboBox.addActionListener(e -> {
+            String selectedCategory = (String) categoryComboBox.getSelectedItem();
+            if ("Sách".equals(selectedCategory)) {
+                loadProductData("book");
+            } else if ("Quà lưu niệm".equals(selectedCategory)) {
+                 loadProductData("gift");
+            }
+        });
+
+        return panel;
+    }
+
+  
+  private JPanel createContentPanel() {
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBackground(Color.WHITE);
+
+    // Title Panel
+    JPanel titlePanel = new JPanel();
+    titlePanel.setBackground(primaryColor);
+    titlePanel.setPreferredSize(new Dimension(0, 50));
+    JLabel titleLabel = new JLabel("QUẢN LÝ SẢN PHẨM");
+    titleLabel.setFont(titleFont);
+    titleLabel.setForeground(textColor);
+    titlePanel.add(titleLabel);
+
+    panel.add(titlePanel, BorderLayout.NORTH);
+
+    // Main Content
+    JPanel mainContent = new JPanel(new BorderLayout(10, 10));
+    mainContent.setBackground(Color.WHITE);
+    mainContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+    // Input Form
+    JPanel inputForm = createEnhancedInputForm();
+    mainContent.add(inputForm, BorderLayout.NORTH); // Thêm form nhập liệu vào phần trên của mainContent
+
+    // Table
+    JPanel tablePanel = createEnhancedTablePanel();
+    mainContent.add(tablePanel, BorderLayout.CENTER); // Thêm bảng vào phần trung tâm của mainContent
+
+    panel.add(mainContent, BorderLayout.CENTER);
+
+    return panel;
+}
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.put("Button.arc", 10);
+                UIManager.put("Component.arc", 10);
+                UIManager.put("TextComponent.arc", 10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ProductManagementGUI gui = new ProductManagementGUI();
+            gui.setVisible(true);
+            gui.loadProductData("book"); // Tải dữ liệu từ cơ sở dữ liệu khi GUI được hiển thị
+        });
+    }
+}
