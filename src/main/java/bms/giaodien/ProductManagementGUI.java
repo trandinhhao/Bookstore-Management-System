@@ -1,129 +1,123 @@
 package bms.giaodien;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.sql.Connection;
+import bms.connectDB.ConnectMySQL;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 public class ProductManagementGUI extends JFrame {
+
     private Color primaryColor = new Color(255, 200, 0, 208); // Cyan
     private Color hoverColor = new Color(232, 206, 10, 223);
     private Color textColor = new Color(50, 50, 50);
     private Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 16);
     private JTable table;
+
     public ProductManagementGUI() {
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-    // Khởi tạo JComboBox với các loại sản phẩm
-    JComboBox<String> categoryComboBox = new JComboBox<>(new String[] {"Sách", "Quà lưu niệm"});
+        // Khởi tạo JComboBox với các loại sản phẩm
+        JComboBox<String> categoryComboBox = new JComboBox<>(new String[]{"Sách", "Quà lưu niệm"});
 
-    JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-    splitPane.setDividerSize(0);
-    splitPane.setBorder(null);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerSize(0);
+        splitPane.setBorder(null);
 
-    // Truyền categoryComboBox vào phương thức createLeftMenu
-    JPanel leftPanel = createLeftMenu(categoryComboBox);
-    JPanel contentPanel = createContentPanel();
+        // Truyền categoryComboBox vào phương thức createLeftMenu
+        JPanel leftPanel = createLeftMenu(categoryComboBox);
+        JPanel contentPanel = createContentPanel();
 
-    splitPane.setLeftComponent(leftPanel);
-    splitPane.setRightComponent(contentPanel);
-    add(splitPane);
+        splitPane.setLeftComponent(leftPanel);
+        splitPane.setRightComponent(contentPanel);
+        add(splitPane);
 
-    setSize(1200, 700);
-    setLocationRelativeTo(null);
-    splitPane.setDividerLocation(200);
-}
-
-    private Connection ConnectMySQL() {
-    try {
-        String url = "jdbc:mysql://localhost:3306/bms";
-        String user = "root";
-        String password = "admin2003";
-        
-        Connection conn = DriverManager.getConnection(url, user, password);
-        System.out.println("Connected to the database successfully!");
-        return conn;
-    } catch (Exception e) {
-        e.printStackTrace();
-        return null;
+        setSize(1200, 700);
+        setLocationRelativeTo(null);
+        splitPane.setDividerLocation(200);
     }
-}
-     private void addFormField(JPanel panel, GridBagConstraints gbc, int x, int y, String label, JComponent field) {
-    gbc.gridx = x;
-    gbc.gridy = y;
-    panel.add(new JLabel(label), gbc);
 
-    gbc.gridx = x + 1;
-    panel.add(field, gbc);
-}
-private void loadProductData(String tableName) {
-    Connection conn = ConnectMySQL();
-    if (conn == null) return;
+    private void addFormField(JPanel panel, GridBagConstraints gbc, int x, int y, String label, JComponent field) {
+        gbc.gridx = x;
+        gbc.gridy = y;
+        panel.add(new JLabel(label), gbc);
 
-    try {
-        String query = "SELECT * FROM bms." + tableName;
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
+        gbc.gridx = x + 1;
+        panel.add(field, gbc);
+    }
 
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        model.setRowCount(0);
-
-        while (rs.next()) {
-            Object[] rowData;
-            if ("book".equals(tableName)) {
-                rowData = new Object[]{
-                    rs.getString("id"), 
-                    rs.getString("name"),
-                    rs.getDouble("costprice"),
-                    rs.getDouble("saleprice"),
-                    rs.getInt("quantity"),
-                    rs.getString("unit"),
-                    rs.getString("origin"),
-                    rs.getString("author"),
-                    rs.getString("publisher"),
-                    rs.getInt("publicationYear"),
-                    rs.getString("genre"),
-                    rs.getString("language")
-                };
-            } else if ("gift".equals(tableName)) {
-                rowData = new Object[]{
-                    rs.getString("id"), 
-                    rs.getString("name"),
-                    rs.getDouble("cost_price"),
-                    rs.getDouble("sale_price"),
-                    rs.getInt("quantity"),
-                    rs.getString("unit"),
-                    rs.getString("origin"),
-                    rs.getString("type"),
-                    rs.getString("material")
-                };
-            } else {
-                continue;
-            }
-            model.addRow(rowData);
+    private void loadProductData(String tableName) throws ClassNotFoundException, SQLException {
+        Connection conn = ConnectMySQL.getConnection();
+        if (conn == null) {
+            return;
         }
 
-        rs.close();
-        stmt.close();
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Không thể tải dữ liệu sản phẩm!");
-    }
-}
+        try {
+            String query = "SELECT * FROM bms." + tableName;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
 
-   
-private JLabel createCircularAvatar() {
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Object[] rowData;
+                if ("book".equals(tableName)) {
+                    rowData = new Object[]{
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getDouble("costprice"),
+                        rs.getDouble("saleprice"),
+                        rs.getInt("quantity"),
+                        rs.getString("unit"),
+                        rs.getString("origin"),
+                        rs.getString("author"),
+                        rs.getString("publisher"),
+                        rs.getInt("publicationYear"),
+                        rs.getString("genre"),
+                        rs.getString("language")
+                    };
+                } else if ("gift".equals(tableName)) {
+                    rowData = new Object[]{
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getDouble("cost_price"),
+                        rs.getDouble("sale_price"),
+                        rs.getInt("quantity"),
+                        rs.getString("unit"),
+                        rs.getString("origin"),
+                        rs.getString("type"),
+                        rs.getString("material")
+                    };
+                } else {
+                    continue;
+                }
+                model.addRow(rowData);
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Không thể tải dữ liệu sản phẩm!");
+        }
+    }
+
+    private JLabel createCircularAvatar() {
         try {
             BufferedImage defaultImage = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = defaultImage.createGraphics();
@@ -147,8 +141,8 @@ private JLabel createCircularAvatar() {
             return new JLabel("ADMIN");
         }
     }
-    
-   private JButton createMenuButton(String text) {
+
+    private JButton createMenuButton(String text) {
         JButton button = new JButton(text);
         button.setFont(menuFont);
         button.setForeground(textColor);
@@ -182,8 +176,8 @@ private JLabel createCircularAvatar() {
         JPanel panel = new JPanel(new BorderLayout());
 
         String[] columnNames = {"Mã SP", "Tên SP", "Giá nhập", "Giá bán",
-                "Số lượng", "Đơn vị tính", "Xuất xứ", "Nhà xuất bản", "Tác giả",
-                "Năm xuất bản", "Thể loại", "Ngôn ngữ"};
+            "Số lượng", "Đơn vị tính", "Xuất xứ", "Nhà xuất bản", "Tác giả",
+            "Năm xuất bản", "Thể loại", "Ngôn ngữ"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -191,60 +185,73 @@ private JLabel createCircularAvatar() {
 
         return panel;
     }
-private JPanel createLeftMenu(JComboBox<String> categoryComboBox) {
-    JPanel panel = new JPanel();
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-    panel.setBackground(primaryColor);
-    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    JPanel adminPanel = new JPanel();
-    adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
-    adminPanel.setBackground(primaryColor);
-    adminPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+    private JPanel createLeftMenu(JComboBox<String> categoryComboBox) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(primaryColor);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    JLabel avatarLabel = createCircularAvatar();
-    avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    adminPanel.add(avatarLabel);
+        JPanel adminPanel = new JPanel();
+        adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
+        adminPanel.setBackground(primaryColor);
+        adminPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
 
-    JLabel adminLabel = new JLabel("ADMIN");
-    adminLabel.setFont(titleFont);
-    adminLabel.setForeground(textColor);
-    adminLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    adminPanel.add(Box.createVerticalStrut(10));
-    adminPanel.add(adminLabel);
+        JLabel avatarLabel = createCircularAvatar();
+        avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        adminPanel.add(avatarLabel);
 
-    JLabel idLabel = new JLabel("ID: ADMIN");
-    idLabel.setFont(menuFont);
-    idLabel.setForeground(textColor);
-    idLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    adminPanel.add(Box.createVerticalStrut(5));
-    adminPanel.add(idLabel);
+        JLabel adminLabel = new JLabel("ADMIN");
+        adminLabel.setFont(titleFont);
+        adminLabel.setForeground(textColor);
+        adminLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        adminPanel.add(Box.createVerticalStrut(10));
+        adminPanel.add(adminLabel);
 
-    panel.add(adminPanel);
-    panel.add(Box.createVerticalStrut(20));
+        JLabel idLabel = new JLabel("ID: ADMIN");
+        idLabel.setFont(menuFont);
+        idLabel.setForeground(textColor);
+        idLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        adminPanel.add(Box.createVerticalStrut(5));
+        adminPanel.add(idLabel);
 
-    String[] menuItems = {"Sản Phẩm", "Hóa Đơn", "Khách Hàng", "Nhân Viên", "Nhà Cung Cấp", "Thống Kê"};
+        panel.add(adminPanel);
+        panel.add(Box.createVerticalStrut(20));
 
-    for (String menuItem : menuItems) {
-        JButton btn = createMenuButton(menuItem);
-        if (menuItem.equals("Sản Phẩm")) {
-            btn.addActionListener(e -> {
-                String selectedCategory = (String) categoryComboBox.getSelectedItem();
-                if ("Sách".equals(selectedCategory)) {
-                    loadProductData("book");
-                } else if ("Quà lưu niệm".equals(selectedCategory)) {
-                    loadProductData("gift");
-                }
-            });
+        String[] menuItems = {"Sản Phẩm", "Hóa Đơn", "Khách Hàng", "Nhân Viên", "Nhà Cung Cấp", "Thống Kê"};
+
+        for (String menuItem : menuItems) {
+            JButton btn = createMenuButton(menuItem);
+            if (menuItem.equals("Sản Phẩm")) {
+                btn.addActionListener(e -> {
+                    String selectedCategory = (String) categoryComboBox.getSelectedItem();
+                    if ("Sách".equals(selectedCategory)) {
+                        try {
+                            loadProductData("book");
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else if ("Quà lưu niệm".equals(selectedCategory)) {
+                        try {
+                            loadProductData("gift");
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+            }
+            panel.add(btn);
+            panel.add(Box.createVerticalStrut(10));
         }
-        panel.add(btn);
-        panel.add(Box.createVerticalStrut(10));
+
+        return panel;
     }
 
-    return panel;
-}
-
-private JPanel createEnhancedInputForm() {
+    private JPanel createEnhancedInputForm() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -258,7 +265,7 @@ private JPanel createEnhancedInputForm() {
 
         // Cột 2
         String[] categories = {"Sách", "Quà lưu niệm", "Vở", "Sản phẩm", "Dụng cụ học tập", "Sách giáo khoa"};
-        
+
         String[] suppliers = {"NXB Kim Đồng"};
         addFormField(panel, gbc, 2, 0, "Nhà cung cấp:", new JComboBox<>(suppliers));
 
@@ -271,7 +278,7 @@ private JPanel createEnhancedInputForm() {
         datePanel.add(dateField, BorderLayout.CENTER);
         datePanel.add(dateButton, BorderLayout.EAST);
         addFormField(panel, gbc, 2, 3, "Ngày nhập:", datePanel);
-        
+
         gbc.gridx = 4;
         gbc.gridy = 0;
         gbc.gridheight = 5;
@@ -292,48 +299,59 @@ private JPanel createEnhancedInputForm() {
         categoryComboBox.addActionListener(e -> {
             String selectedCategory = (String) categoryComboBox.getSelectedItem();
             if ("Sách".equals(selectedCategory)) {
-                loadProductData("book");
+                try {
+                    loadProductData("book");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else if ("Quà lưu niệm".equals(selectedCategory)) {
-                 loadProductData("gift");
+                try {
+                    loadProductData("gift");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
         return panel;
     }
 
-  
-  private JPanel createContentPanel() {
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.setBackground(Color.WHITE);
+    private JPanel createContentPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.WHITE);
 
-    // Title Panel
-    JPanel titlePanel = new JPanel();
-    titlePanel.setBackground(primaryColor);
-    titlePanel.setPreferredSize(new Dimension(0, 50));
-    JLabel titleLabel = new JLabel("QUẢN LÝ SẢN PHẨM");
-    titleLabel.setFont(titleFont);
-    titleLabel.setForeground(textColor);
-    titlePanel.add(titleLabel);
+        // Title Panel
+        JPanel titlePanel = new JPanel();
+        titlePanel.setBackground(primaryColor);
+        titlePanel.setPreferredSize(new Dimension(0, 50));
+        JLabel titleLabel = new JLabel("QUẢN LÝ SẢN PHẨM");
+        titleLabel.setFont(titleFont);
+        titleLabel.setForeground(textColor);
+        titlePanel.add(titleLabel);
 
-    panel.add(titlePanel, BorderLayout.NORTH);
+        panel.add(titlePanel, BorderLayout.NORTH);
 
-    // Main Content
-    JPanel mainContent = new JPanel(new BorderLayout(10, 10));
-    mainContent.setBackground(Color.WHITE);
-    mainContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // Main Content
+        JPanel mainContent = new JPanel(new BorderLayout(10, 10));
+        mainContent.setBackground(Color.WHITE);
+        mainContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-    // Input Form
-    JPanel inputForm = createEnhancedInputForm();
-    mainContent.add(inputForm, BorderLayout.NORTH); // Thêm form nhập liệu vào phần trên của mainContent
+        // Input Form
+        JPanel inputForm = createEnhancedInputForm();
+        mainContent.add(inputForm, BorderLayout.NORTH); // Thêm form nhập liệu vào phần trên của mainContent
 
-    // Table
-    JPanel tablePanel = createEnhancedTablePanel();
-    mainContent.add(tablePanel, BorderLayout.CENTER); // Thêm bảng vào phần trung tâm của mainContent
+        // Table
+        JPanel tablePanel = createEnhancedTablePanel();
+        mainContent.add(tablePanel, BorderLayout.CENTER); // Thêm bảng vào phần trung tâm của mainContent
 
-    panel.add(mainContent, BorderLayout.CENTER);
+        panel.add(mainContent, BorderLayout.CENTER);
 
-    return panel;
-}
+        return panel;
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -347,7 +365,13 @@ private JPanel createEnhancedInputForm() {
             }
             ProductManagementGUI gui = new ProductManagementGUI();
             gui.setVisible(true);
-            gui.loadProductData("book"); // Tải dữ liệu từ cơ sở dữ liệu khi GUI được hiển thị
+            try {
+                gui.loadProductData("book"); // Tải dữ liệu từ cơ sở dữ liệu khi GUI được hiển thị
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductManagementGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 }

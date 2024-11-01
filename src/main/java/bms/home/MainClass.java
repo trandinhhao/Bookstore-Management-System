@@ -1,10 +1,7 @@
 package bms.home;
 
 import bms.giaodien.LoginForm;
-import bms.giaodien.ProductManagementGUI;
-import bms.work.*;
 import java.sql.*;
-import java.util.*;
 import javax.swing.*;
 
 public class MainClass {
@@ -15,6 +12,5 @@ public class MainClass {
             LoginForm loginUI = new LoginForm();
             loginUI.setVisible(true);
         });
-        // Giao dien menu
     }
 }

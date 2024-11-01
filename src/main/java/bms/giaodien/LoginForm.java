@@ -1,39 +1,21 @@
 package bms.giaodien;
+// DONE
 
 import bms.work.Login;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JCheckBox;
-
-import java.awt.event.MouseAdapter;
-
-import java.awt.event.MouseAdapter;
-
-import java.awt.event.MouseAdapter;
-
-import java.awt.event.MouseAdapter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.*;
+import java.sql.*;
+import java.util.logging.*;
 
 public class LoginForm extends JFrame {
 
     public LoginForm() {
         // Cài đặt tiêu đề và kích thước cho cửa sổ
-        setTitle("Hệ thống quản lý nhà sách");
+        setTitle("Đăng nhập hệ thống quản lý BMS");
         setSize(750, 550);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Dong form khong tat ung dung
         setLocationRelativeTo(null);  // Căn giữa cửa sổ
         setLayout(new BorderLayout());
 
@@ -69,6 +51,7 @@ public class LoginForm extends JFrame {
         // Ô nhập Email
         JTextField txtEmail = new JTextField();
         txtEmail.setBorder(BorderFactory.createTitledBorder("Tài khoản"));
+        txtEmail.setPreferredSize(new Dimension(200, 40));
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
@@ -77,6 +60,7 @@ public class LoginForm extends JFrame {
         // Ô nhập Password
         JPasswordField txtPassword = new JPasswordField();
         txtPassword.setBorder(BorderFactory.createTitledBorder("Mật khẩu"));
+        txtPassword.setPreferredSize(new Dimension(200, 40));
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -101,18 +85,7 @@ public class LoginForm extends JFrame {
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         panelRight.add(lblForgot, gbc);
-
-        // Dòng "Sign Up"
-        JLabel lblSignUp = new JLabel("Don't have an account? Sign Up");
-        lblSignUp.setFont(new Font("Arial", Font.PLAIN, 12));
-        lblSignUp.setForeground(Color.BLUE);
-        lblSignUp.setHorizontalAlignment(SwingConstants.CENTER);
-        lblSignUp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.gridwidth = 2;
-        panelRight.add(lblSignUp, gbc);
-
+        
         // Thêm các panel vào giao diện chính
         panelMain.add(panelLeft);
         panelMain.add(panelRight);
@@ -127,7 +100,7 @@ public class LoginForm extends JFrame {
                 String username = txtEmail.getText();
                 String password = new String(txtPassword.getPassword());
 
-                // Xử lý đăng nhập (ví dụ)
+                // Xử lý đăng nhập 
                 Login log = new Login();
                 try {
                     if (log.checkLogin(username, password)) {
@@ -138,31 +111,22 @@ public class LoginForm extends JFrame {
                                 UIManager.put("Button.arc", 10);
                                 UIManager.put("Component.arc", 10);
                                 UIManager.put("TextComponent.arc", 10);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
+                            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+
                             }
                             new ProductManagementGUI().setVisible(true);
+                            dispose(); // dong form ma khong tat app
                         });
                     } else {
                         JOptionPane.showMessageDialog(null, "Đăng nhập thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
+                } catch (ClassNotFoundException | SQLException ex) {
                     Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
-
-        // Hành động cho "Sign Up"
-        lblSignUp.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                RegisterForm.openRegistrationForm();  // Mở form đăng ký
-            }
-        });
         
-        // Hành động cho "Quên mk"
+        // Hành động cho "Quên mật khẩu"
         lblForgot.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -171,7 +135,7 @@ public class LoginForm extends JFrame {
         });
     }
 
-    // Hàm chạy giao diện
+    // Hàm chạy giao diện test
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             LoginForm loginUI = new LoginForm();

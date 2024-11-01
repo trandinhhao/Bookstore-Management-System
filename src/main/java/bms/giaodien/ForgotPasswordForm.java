@@ -3,15 +3,14 @@ package bms.giaodien;
 import bms.work.ForgotPassword;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 
 public class ForgotPasswordForm extends JFrame {
 
     public ForgotPasswordForm() {
-        setTitle("Hệ thống quản lý nhà sách");
-        setSize(800, 550);
+        setTitle("Đặt lại mật khẩu hệ thống");
+        setSize(525, 385);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
@@ -106,6 +105,13 @@ public class ForgotPasswordForm extends JFrame {
     }
 
     public static void openForgotPasswordForm() {
+        SwingUtilities.invokeLater(() -> {
+            ForgotPasswordForm forgotPasswordUI = new ForgotPasswordForm();
+            forgotPasswordUI.setVisible(true);
+        });
+    }
+
+    public static void main(String[] args) { // TEST
         SwingUtilities.invokeLater(() -> {
             ForgotPasswordForm forgotPasswordUI = new ForgotPasswordForm();
             forgotPasswordUI.setVisible(true);
