@@ -114,7 +114,13 @@ public class LoginForm extends JFrame {
                             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
 
                             }
-                            new ProductManagementGUI().setVisible(true);
+                            try {
+                                new ProductManagementGUI(username, log.getID(username)).setVisible(true);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (SQLException ex) {
+                                Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             dispose(); // dong form ma khong tat app
                         });
                     } else {

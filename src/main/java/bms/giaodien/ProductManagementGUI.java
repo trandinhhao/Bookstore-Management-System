@@ -7,6 +7,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.sql.Connection;
 import bms.connectDB.ConnectMySQL;
+import java.io.File;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,16 +20,23 @@ import javax.imageio.ImageIO;
 
 public class ProductManagementGUI extends JFrame {
 
-    private Color primaryColor = new Color(255, 200, 0, 208); // Cyan
-    private Color hoverColor = new Color(232, 206, 10, 223);
+//    private Color primaryColor = new Color(144, 238, 144, 208); // Cyan
+    private Color primaryColor = new Color(195, 199, 243, 255);
+    private Color hoverColor = new Color(227, 170, 221, 255);
     private Color textColor = new Color(50, 50, 50);
-    private Font menuFont = new Font("Segoe UI", Font.PLAIN, 14);
+    private Font menuFont = new Font("Segoe UI", Font.BOLD, 14);
+    private Font idFont = new Font("Segoe UI", Font.PLAIN, 14);
     private Font titleFont = new Font("Segoe UI", Font.BOLD, 16);
     private JTable table;
+    private String username;
+    private String id;
 
-    public ProductManagementGUI() {
+    public ProductManagementGUI(String username,String id) {
+        this.username = username;
+        this.id = id;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        setTitle("Menu");
 
         // Khởi tạo JComboBox với các loại sản phẩm
         JComboBox<String> categoryComboBox = new JComboBox<>(new String[]{"Sách", "Quà lưu niệm"});
@@ -38,7 +46,7 @@ public class ProductManagementGUI extends JFrame {
         splitPane.setBorder(null);
 
         // Truyền categoryComboBox vào phương thức createLeftMenu
-        JPanel leftPanel = createLeftMenu(categoryComboBox);
+        JPanel leftPanel = createLeftMenu(categoryComboBox, username, id);
         JPanel contentPanel = createContentPanel();
 
         splitPane.setLeftComponent(leftPanel);
@@ -119,7 +127,7 @@ public class ProductManagementGUI extends JFrame {
 
     private JLabel createCircularAvatar() {
         try {
-            BufferedImage defaultImage = new BufferedImage(80, 80, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage defaultImage = ImageIO.read(new File("C:\\Users\\PC\\Desktop\\BMS\\BMS\\src\\main\\java\\bms\\giaodien\\j97.jpg"));
             Graphics2D g2d = defaultImage.createGraphics();
             g2d.setColor(new Color(100, 100, 100));
             g2d.fillOval(0, 0, 80, 80);
@@ -146,10 +154,12 @@ public class ProductManagementGUI extends JFrame {
         JButton button = new JButton(text);
         button.setFont(menuFont);
         button.setForeground(textColor);
-        button.setBackground(primaryColor);
+        Color buttonColor = new Color(200, 168, 233);
+        button.setBackground(buttonColor);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
+        button.setContentAreaFilled(true);
+        button.setOpaque(true);
         button.setMaximumSize(new Dimension(180, 40));
         button.setPreferredSize(new Dimension(180, 40));
 
@@ -164,8 +174,8 @@ public class ProductManagementGUI extends JFrame {
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(primaryColor);
-                button.setContentAreaFilled(false);
+                button.setBackground(buttonColor);
+                button.setContentAreaFilled(true);
             }
         });
 
@@ -186,7 +196,7 @@ public class ProductManagementGUI extends JFrame {
         return panel;
     }
 
-    private JPanel createLeftMenu(JComboBox<String> categoryComboBox) {
+    private JPanel createLeftMenu(JComboBox<String> categoryComboBox, String username, String id) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(primaryColor);
@@ -201,15 +211,15 @@ public class ProductManagementGUI extends JFrame {
         avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         adminPanel.add(avatarLabel);
 
-        JLabel adminLabel = new JLabel("ADMIN");
+        JLabel adminLabel = new JLabel("Xin chào, " + username);
         adminLabel.setFont(titleFont);
         adminLabel.setForeground(textColor);
         adminLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         adminPanel.add(Box.createVerticalStrut(10));
         adminPanel.add(adminLabel);
 
-        JLabel idLabel = new JLabel("ID: ADMIN");
-        idLabel.setFont(menuFont);
+        JLabel idLabel = new JLabel("ID: " + id);
+        idLabel.setFont(idFont);
         idLabel.setForeground(textColor);
         idLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         adminPanel.add(Box.createVerticalStrut(5));
@@ -218,7 +228,7 @@ public class ProductManagementGUI extends JFrame {
         panel.add(adminPanel);
         panel.add(Box.createVerticalStrut(20));
 
-        String[] menuItems = {"Sản Phẩm", "Hóa Đơn", "Khách Hàng", "Nhân Viên", "Nhà Cung Cấp", "Thống Kê"};
+        String[] menuItems = {"Sản Phẩm","Khách Hàng", "Nhân Viên", "Nhà Cung Cấp","Hóa Đơn","Quản Lý Kho", "Thống Kê","Trợ Giúp"};
 
         for (String menuItem : menuItems) {
             JButton btn = createMenuButton(menuItem);
@@ -328,7 +338,7 @@ public class ProductManagementGUI extends JFrame {
         JPanel titlePanel = new JPanel();
         titlePanel.setBackground(primaryColor);
         titlePanel.setPreferredSize(new Dimension(0, 50));
-        JLabel titleLabel = new JLabel("QUẢN LÝ SẢN PHẨM");
+        JLabel titleLabel = new JLabel("HỆ THỐNG QUẢN LÝ BÁN HÀNG");
         titleLabel.setFont(titleFont);
         titleLabel.setForeground(textColor);
         titlePanel.add(titleLabel);
@@ -363,7 +373,7 @@ public class ProductManagementGUI extends JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            ProductManagementGUI gui = new ProductManagementGUI();
+            ProductManagementGUI gui = new ProductManagementGUI("TEST", "TEST");
             gui.setVisible(true);
             try {
                 gui.loadProductData("book"); // Tải dữ liệu từ cơ sở dữ liệu khi GUI được hiển thị

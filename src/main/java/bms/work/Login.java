@@ -20,4 +20,16 @@ public class Login {
             return false;
         }
     }
+
+    public String getID(String username) throws ClassNotFoundException, SQLException {
+        Connection con = ConnectMySQL.getConnection();
+        PreparedStatement stmt = con.prepareStatement("SELECT id FROM acc WHERE username = ?");
+        stmt.setString(1, username);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getString("id");
+        } else {
+            return "";
+        }
+    }
 }
