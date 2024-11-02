@@ -228,7 +228,7 @@ public class ProductManagementGUI extends JFrame {
         panel.add(adminPanel);
         panel.add(Box.createVerticalStrut(20));
 
-        String[] menuItems = {"Sản Phẩm","Khách Hàng", "Nhân Viên", "Nhà Cung Cấp","Hóa Đơn","Quản Lý Kho", "Thống Kê","Trợ Giúp"};
+        String[] menuItems = {"Sản Phẩm", "Nhân Viên", "Khách Hàng", "Nhà Cung Cấp","Hóa Đơn","Quản Lý Kho", "Thống Kê","Trợ Giúp", "Đăng Xuất"};
 
         for (String menuItem : menuItems) {
             JButton btn = createMenuButton(menuItem);
