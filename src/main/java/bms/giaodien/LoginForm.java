@@ -85,7 +85,7 @@ public class LoginForm extends JFrame {
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         panelRight.add(lblForgot, gbc);
-        
+
         // Thêm các panel vào giao diện chính
         panelMain.add(panelLeft);
         panelMain.add(panelRight);
@@ -94,44 +94,38 @@ public class LoginForm extends JFrame {
         add(panelMain);
 
         // Hành động cho nút Login
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = txtEmail.getText();
-                String password = new String(txtPassword.getPassword());
+        btnLogin.addActionListener((ActionEvent e) -> {
+            String username = txtEmail.getText();
+            String password = new String(txtPassword.getPassword());
+            // Xử lý đăng nhập
+            Login log1 = new Login();
+            try {
+                if (log1.checkLogin(username, password)) {
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    SwingUtilities.invokeLater(() -> {
+                        try {
+                            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                            UIManager.put("Button.arc", 10);
+                            UIManager.put("Component.arc", 10);
+                            UIManager.put("TextComponent.arc", 10);
+                        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
 
-                // Xử lý đăng nhập 
-                Login log = new Login();
-                try {
-                    if (log.checkLogin(username, password)) {
-                        JOptionPane.showMessageDialog(null, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                        SwingUtilities.invokeLater(() -> {
-                            try {
-                                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                                UIManager.put("Button.arc", 10);
-                                UIManager.put("Component.arc", 10);
-                                UIManager.put("TextComponent.arc", 10);
-                            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
-
-                            }
-                            try {
-                                new ProductManagementGUI(username, log.getID(username)).setVisible(true);
-                            } catch (ClassNotFoundException ex) {
-                                Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (SQLException ex) {
-                                Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            dispose(); // dong form ma khong tat app
-                        });
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Đăng nhập thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (ClassNotFoundException | SQLException ex) {
-                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        try {
+                            new TEST(username, log1.getID(username)).setVisible(true);
+                        } catch (ClassNotFoundException | SQLException ex) {
+                            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        dispose(); // dong form ma khong tat app
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
+
         // Hành động cho "Quên mật khẩu"
         lblForgot.addMouseListener(new MouseAdapter() {
             @Override

@@ -73,26 +73,26 @@ public class Report {
         return null;
     }
 
-    public static Report generateInventoryReport() throws SQLException, ClassNotFoundException {
-        StringBuilder content = new StringBuilder();
-        String sql = "SELECT product_name, quantity, unit_price FROM inventory";
-        Connection conn = ConnectMySQL.getConnection();
-        try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-            content.append("Inventory Report\n");
-            content.append("----------------\n");
-            content.append("Product Name | Quantity | Unit Price\n");
-            while (rs.next()) {
-                content.append(String.format("%-12s | %-8d | $%.2f\n",
-                        rs.getString("product_name"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("unit_price")));
-            }
-        }
-
-        Report report = new Report(0, "Inventory", new Date(), content.toString());
-        report.addReport();
-        return report;
-    }
+//    public static Report generateInventoryReport() throws SQLException, ClassNotFoundException {
+//        StringBuilder content = new StringBuilder();
+//        String sql = "SELECT product_name, quantity, unit_price FROM inventory";
+//        Connection conn = ConnectMySQL.getConnection();
+//        try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+//            content.append("Inventory Report\n");
+//            content.append("----------------\n");
+//            content.append("Product Name | Quantity | Unit Price\n");
+//            while (rs.next()) {
+//                content.append(String.format("%-12s | %-8d | $%.2f\n",
+//                        rs.getString("product_name"),
+//                        rs.getInt("quantity"),
+//                        rs.getDouble("unit_price")));
+//            }
+//        }
+//
+//        Report report = new Report(0, "Inventory", new Date(), content.toString());
+//        report.addReport();
+//        return report;
+//    }
 
     public static Report generateSalesReport(Date startDate, Date endDate) throws SQLException, ClassNotFoundException {
         Connection conn = ConnectMySQL.getConnection();
@@ -117,7 +117,6 @@ public class Report {
                 }
             }
         }
-
         Report report = new Report(0, "Sales", new Date(), content.toString());
         report.addReport();
         return report;

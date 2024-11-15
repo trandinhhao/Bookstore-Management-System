@@ -71,35 +71,32 @@ public class ForgotPasswordForm extends JFrame {
         add(btnResetPassword, gbc);
 
         // Hành động khi nhấn nút Reset Password
-        btnResetPassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String id = txtId.getText();
-                String username = txtUsername.getText();
-                String newPassword = new String(txtNewPassword.getPassword());
-                String confirmPassword = new String(txtConfirmPassword.getPassword());
+        btnResetPassword.addActionListener((ActionEvent e) -> {
+            String id = txtId.getText();
+            String username = txtUsername.getText();
+            String newPassword = new String(txtNewPassword.getPassword());
+            String confirmPassword = new String(txtConfirmPassword.getPassword());
 
-                // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
-                if (!newPassword.equals(confirmPassword)) {
-                    JOptionPane.showMessageDialog(null, "Mật khẩu xác nhận không khớp!", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+            // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
+            if (!newPassword.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(null, "Mật khẩu xác nhận không khớp!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                // Gọi hàm resetPassword để thực hiện việc đặt lại mật khẩu
-                ForgotPassword forgotPassword = new ForgotPassword();
-                try {
-                    int result = forgotPassword.resetPassword(id, username, newPassword);
-                    if (result == 1) {
-                        JOptionPane.showMessageDialog(null, "Đặt mật khẩu mới thành công!");
-                    } else if (result == 2) {
-                        JOptionPane.showMessageDialog(null, "Đặt lại thất bại, vui lòng thử lại.", "Error", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Không tồn tại tài khoản, vui lòng thử lại!", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (ClassNotFoundException | SQLException ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Database error!", "Error", JOptionPane.ERROR_MESSAGE);
+            // Gọi hàm resetPassword để thực hiện việc đặt lại mật khẩu
+            ForgotPassword forgotPassword = new ForgotPassword();
+            try {
+                int result = forgotPassword.resetPassword(id, username, newPassword);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "Đặt mật khẩu mới thành công!");
+                    dispose(); // tắt cái cửa sổ quên mk này đi
+                } else if (result == 2) {
+                    JOptionPane.showMessageDialog(null, "Đặt lại thất bại, vui lòng thử lại.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tồn tại tài khoản, vui lòng thử lại!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (ClassNotFoundException | SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Database error!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
