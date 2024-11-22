@@ -27,7 +27,7 @@ public class GUIWarehouse extends JPanel {
         JPanel mainContent = new JPanel();
         mainContent.setBackground(Color.WHITE);
         mainContent.setLayout(new BoxLayout(mainContent, BoxLayout.Y_AXIS));
-        mainContent.setBorder(BorderFactory.createEmptyBorder(20, 250, 20, 250));
+//        mainContent.setBorder(BorderFactory.createEmptyBorder(20, 250, 20, 250));
 
         // Input Form
         JPanel inputForm = createEnhancedInventoryInputForm();
@@ -351,39 +351,35 @@ public class GUIWarehouse extends JPanel {
         rs.close();
         stmt.close();
     }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                // Set the look and feel to match the system
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-}
+                // Create a new JFrame to hold the panel
+                JFrame frame = new JFrame("Test GUIwarehouse");
 
+                // Create an instance of the GUIWarehouse panel
+                GUIWarehouse warehouse = new GUIWarehouse();
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            try {
-//                // Set the look and feel to match the system
-//                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//
-//                // Create a new JFrame to hold the panel
-//                JFrame frame = new JFrame("Test GUIwarehouse");
-//
-//                // Create an instance of the GUIWarehouse panel
-//                GUIWarehouse warehouse = new GUIWarehouse();
-//
-//                // Add the panel to the frame
-//                frame.add(warehouse);
-//
-//                // Set default close operation
-//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
+                // Add the panel to the frame
+                frame.add(warehouse);
+
+                // Set default close operation
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 //                // Pack the frame to fit the preferred size of its components
 //                frame.pack();
-//
-//                // Center the frame on the screen
-//                frame.setLocationRelativeTo(null);
-//
-//                // Make the frame visible
-//                frame.setVisible(true);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
-//    }
-//}
+
+                // Center the frame on the screen
+                frame.setLocationRelativeTo(null);
+
+                // Make the frame visible
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}

@@ -232,7 +232,7 @@ public class TEST extends JFrame {
 
     private JLabel createCircularAvatar() { // OK
         try {
-            BufferedImage defaultImage = ImageIO.read(new File("F:\\sourcecode\\3rd year\\1st term\\Java-OOP\\BTL java\\srcBTL\\Bookstore-Management-System\\src\\main\\java\\bms\\giaodien\\j97.jpg"));
+            BufferedImage defaultImage = ImageIO.read(new File("C:\\Users\\PC\\Desktop\\BMS\\BMS\\src\\main\\java\\bms\\giaodien\\j97.jpg"));
             Graphics2D g2d = defaultImage.createGraphics();
             g2d.setColor(new Color(100, 100, 100));
             g2d.fillOval(0, 0, 80, 80);
