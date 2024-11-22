@@ -3,6 +3,8 @@ package bms.product;
 import bms.connectDB.ConnectMySQL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Notebook extends Product {
     private int pageCount;
@@ -81,5 +83,31 @@ public class Notebook extends Product {
         } catch (Exception e) {
             // Thong bao cap nhat khong thanh cong, yeu cau nhap lai thong tin
         }
+    }
+    
+    public static Notebook getProductById(String productId) throws SQLException, ClassNotFoundException {
+        String sqlString = "SELECT * FROM notebook WHERE id= ?";
+        Connection con = ConnectMySQL.getConnection();
+        try(PreparedStatement stmt = con.prepareStatement(sqlString)){
+            stmt.setString(1, productId);
+            try(ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {
+                    return new Notebook(
+                            rs.getInt("page_count"),
+                            rs.getString("paper_type"),
+                            rs.getString("size"),
+                            rs.getString("manufacturer"),
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getDouble("cost_price"),
+                            rs.getDouble("sale_price"),
+                            rs.getInt("quantity"),
+                            rs.getString("unit"),
+                            rs.getString("origin")
+                    );
+                }
+            }
+        }
+        return null;
     }
 }

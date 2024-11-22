@@ -9,57 +9,57 @@ import java.sql.ResultSet;
 import java.util.*;
 
 public class Order {
-
-    private int orderId;
-    private int customerId;
-//    private LinkedHashMap<Product, Integer> products;
+    private String orderId;
     private String productID;
-    private Date orderDate;
-    private double totalAmount;
+    private java.util.Date orderDate;
+    private int totalAmount;
+    private double totalPrice;
     private String status;
 
     public Order() {
 
     }
 
-    public Order(String productID, int orderId, int customerId, Date orderDate, double totalAmount, String status) {
+    public Order(String productID, String orderId, java.util.Date orderDate, int totalAmount, double total_price, String status) {
 //        this.products.put(products, orderId);
         this.productID = productID;
         this.orderId = orderId;
-        this.customerId = customerId;
         this.totalAmount = totalAmount;
+        this.totalPrice = total_price;
         this.orderDate = orderDate;
         this.status = status;
     }
-
+    
+    
     public void addOrder() throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO orders (customer_id, order_date, total_amount, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO orders (order_id, product_id, order_date, total_amount, total_price, status) VALUES (?, ?, ?, ?, ?, ?)";
         Connection conn = ConnectMySQL.getConnection();
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, this.productID);
-            pstmt.setInt(2, this.customerId);
+            pstmt.setString(1, orderId);
+            pstmt.setString(2, this.productID);
             pstmt.setDate(3, new java.sql.Date(this.orderDate.getTime()));
             pstmt.setDouble(4, this.totalAmount);
-            pstmt.setString(5, this.status);
+            pstmt.setDouble(5, this.totalPrice);
+            pstmt.setString(6, this.status);
             pstmt.executeUpdate();
         }
     }
 
-    public static Order getOrderById(String productId, int orderId) throws SQLException, ClassNotFoundException {
+    public static Order getOrderById(String productId) throws SQLException, ClassNotFoundException {
         Connection conn = ConnectMySQL.getConnection();
 
-        String sqlString = "SELECT * FROM orders WHERE order_id = ?";
+        String sqlString = "SELECT * FROM orders WHERE product_id= ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sqlString)) {
-            pstmt.setInt(1, orderId);
+            pstmt.setString(1, productId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new Order(
                             rs.getString("product_id"),
-                            rs.getInt("order_id"),
-                            rs.getInt("customer_id"),
+                            rs.getString("order_id"),
                             rs.getDate("order_date"),
-                            rs.getDouble("total_amount"),
+                            rs.getInt("total_amount"),
+                            rs.getDouble("total_price"),
                             rs.getString("status")
                     );
                 }
@@ -77,10 +77,10 @@ public class Order {
             while (rs.next()) {
                 orders.add(new Order(
                         rs.getString("product_id"),
-                        rs.getInt("order_id"),
-                        rs.getInt("customer_id"),
+                        rs.getString("order_id"),
                         rs.getDate("order_date"),
-                        rs.getDouble("total_amount"),
+                        rs.getInt("total_amount"),
+                        rs.getDouble("total_price"),
                         rs.getString("status")
                 ));
             }
@@ -89,15 +89,14 @@ public class Order {
     }
 
     public void updateInDatabase() throws SQLException, ClassNotFoundException {
-        String sqlString = "UPDATE orders SET customer_id = ?, order_date = ?, total_amount = ?, status = ? WHERE order_id = ?";
+        String sqlString = "UPDATE orders SET customer_id = ?, order_date = ?, total_amount = ?, total_price = ?, status = ? WHERE order_id = ?";
         Connection conn = ConnectMySQL.getConnection();
         try (PreparedStatement pstmt = conn.prepareStatement(sqlString)) {
             pstmt.setString(1, this.productID);
-            pstmt.setInt(2, this.orderId);
-            pstmt.setInt(3, this.customerId);
-            pstmt.setDate(4, new java.sql.Date(this.orderDate.getTime()));
-            pstmt.setDouble(5, this.totalAmount);
-            pstmt.setString(6, this.status);
+            pstmt.setString(2, this.orderId);
+            pstmt.setDate(3, new java.sql.Date(this.orderDate.getTime()));
+            pstmt.setDouble(4, this.totalAmount);
+            pstmt.setString(5, this.status);
             pstmt.executeUpdate();
         }
     }
@@ -106,33 +105,33 @@ public class Order {
         Connection conn = ConnectMySQL.getConnection();
         String sql = "DELETE FROM orders WHERE order_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, this.orderId);
+            pstmt.setString(1, this.orderId);
             pstmt.executeUpdate();
         }
     }
 
-    public void updateProduct(int totalAmount) throws SQLException, ClassNotFoundException {
-        String sqlString = "UPDATE products SET quantity = quantity - ? WHERE product_id = ?";
+    public static void updateProduct(int totalAmount, String productID, String productType) throws SQLException, ClassNotFoundException {
+        String sqlString = String.format("UPDATE %s SET quantity = quantity - ? WHERE id = ?", productType);
 
         Connection conn = ConnectMySQL.getConnection();
         try (PreparedStatement pstmt = conn.prepareStatement(sqlString)) {
             pstmt.setInt(1, totalAmount);
-            pstmt.setString(2, this.productID);
+            pstmt.setString(2, productID);
 
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected == 0) {
-                throw new SQLException("Update failed, no product found with ID: " + this.productID);
+                throw new SQLException("Update failed, no product found with ID: " + productID);
             }
         } catch (SQLException e) {
             System.out.println("Error updating product quantity: " + e.getMessage());
         }
     }
 
-    public double calculateInvoiceTotal(String productId) throws SQLException, ClassNotFoundException {
+    public static double calculateInvoiceTotal(String productId, int quantity, String productType) throws SQLException, ClassNotFoundException {
         Connection conn = ConnectMySQL.getConnection();
 
-        String sqlPrice = "SELECT sale_price FROM products WHERE product_id = ?";
+        String sqlPrice = String.format("SELECT sale_price FROM %s WHERE id = ?", productType);
         double price = 0;
         double totalAmount = 0;
         try (PreparedStatement pstmt = conn.prepareStatement(sqlPrice)) {
@@ -144,17 +143,10 @@ public class Order {
                 }
             }
         }
-
-        String sql = "SELECT quantity as total FROM orders WHERE product_id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, productId);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    totalAmount = rs.getDouble("total");
-                }
-            }
-        }
-        return totalAmount * price;
+        return price * quantity;
+    }
+    
+    public String getOrderId(){
+        return this.orderId;
     }
 }

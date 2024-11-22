@@ -3,6 +3,8 @@ package bms.product;
 import bms.connectDB.ConnectMySQL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Stationery extends Product {
 
@@ -79,5 +81,30 @@ public class Stationery extends Product {
         } catch (Exception e) {
             // Thong bao cap nhat khong thanh cong, yeu cau nhap lai thong tin
         }
+    }
+    
+    public static Stationery getProductById(String productId) throws SQLException, ClassNotFoundException {
+        String sqlString = "SELECT * FROM stationery WHERE id= ?";
+        Connection con = ConnectMySQL.getConnection();
+        try(PreparedStatement stmt = con.prepareStatement(sqlString)){
+            stmt.setString(1, productId);
+            try(ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {
+                    return new Stationery(
+                            rs.getString("type"),
+                            rs.getString("manufacture"),
+                            rs.getString("material"),
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getDouble("cost_price"),
+                            rs.getDouble("sale_price"),
+                            rs.getInt("quantity"),
+                            rs.getString("unit"),
+                            rs.getString("origin")
+                    );
+                }
+            }
+        }
+        return null;
     }
 }

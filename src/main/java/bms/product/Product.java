@@ -1,5 +1,7 @@
 package bms.product;
 
+import java.sql.SQLException;
+
 public class Product {
 
     protected String id;
@@ -18,6 +20,10 @@ public class Product {
         this.quantity = quantity;
         this.unit = unit;
         this.origin = origin;
+    }
+    
+    public Product(){
+        
     }
 
     public String getId() {
@@ -70,6 +76,7 @@ public class Product {
         this.origin = origin;
     }
     
-    
-
+    public static Product getProductById(String productId) throws SQLException, ClassNotFoundException{
+        return new Product();
+    }
 }

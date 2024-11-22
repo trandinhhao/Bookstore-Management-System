@@ -4,6 +4,7 @@ import bms.connectDB.ConnectMySQL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Book extends Product {
 
@@ -22,7 +23,7 @@ public class Book extends Product {
         this.language = language;
     }
 
-    public void addBook(String author, String publisher, int publicationYear, String genre, String language, String id, String name, double costPrice, double salePrice, int quantity, String unit, String origin) {
+    public void addBook(double costPrice, double salePrice, String author, String publisher, int publicationYear, String genre, String language, String id, String name, int quantity, String unit, String origin) {
         try {
             Connection con = ConnectMySQL.getConnection();
             PreparedStatement stmt = con.prepareStatement("INSERT INTO Book VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ? ,?)");
@@ -77,5 +78,32 @@ public class Book extends Product {
         } catch (Exception e) {
             // Thong bao xoa khong thanh cong, yeu cau nhap lai id
         }
+    }
+    
+    public static Book getProductById(String productId) throws SQLException, ClassNotFoundException {
+        String sqlString = "SELECT * FROM book WHERE id= ?";
+        Connection con = ConnectMySQL.getConnection();
+        try(PreparedStatement stmt = con.prepareStatement(sqlString)){
+            stmt.setString(1, productId);
+            try(ResultSet rs = stmt.executeQuery()){
+                if (rs.next()) {
+                    return new Book(
+                            rs.getString("author"),
+                            rs.getString("publisher"),
+                            rs.getInt("publicationYear"),
+                            rs.getString("genre"),
+                            rs.getString("language"),
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getDouble("cost_price"),
+                            rs.getDouble("sale_price"),
+                            rs.getInt("quantity"),
+                            rs.getString("unit"),
+                            rs.getString("origin")
+                    );
+                }
+            }
+        }
+        return null;
     }
 }
