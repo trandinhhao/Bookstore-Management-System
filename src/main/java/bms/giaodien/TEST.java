@@ -88,10 +88,9 @@ public class TEST extends JFrame {
         //
         // TẠO CÁC PANEL KHÁC NHAU, MỌI NGƯỜI TỰ THÊM VÀO ĐÂY----------------------
         //
-        JPanel defaultPanel = new JPanel();
-        defaultPanel.setBackground(Color.lightGray);
-        defaultPanel.add(new JLabel("Giao diện lúc mới vào"));
-        cardPanel.add(defaultPanel, "default");
+        // Welcome
+        GUIWelcome welcomePanel = new GUIWelcome();
+        cardPanel.add(welcomePanel, "welcomePanel");
         // 2 panel test cho mọi người hiểu
         JPanel panel1 = new JPanel();
         panel1.setBackground(Color.BLACK);
@@ -120,6 +119,16 @@ public class TEST extends JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(TEST.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        // Bill
+        GUIBill billPanel = new GUIBill();
+        cardPanel.add(billPanel.getContentPane(), "billPanel");
+        
+        // Stats
+        GUIStats statsPanel = new GUIStats();
+        cardPanel.add(statsPanel.getContentPane(), "statsPanel");
+        
+        
         for (String menuItem : menuItems) {
             JButton btn = createMenuButton(menuItem);
             allButtons.add(btn);
@@ -138,11 +147,11 @@ public class TEST extends JFrame {
                 } else if (buttonText.equals("Nhà Cung Cấp")) {
                     cl.show(cardPanel, "Panel 2");
                 } else if (buttonText.equals("Hóa Đơn")) {
-                    cl.show(cardPanel, "Panel 1");
+                    cl.show(cardPanel, "billPanel");
                 } else if (buttonText.equals("Quản Lý Kho")) {
                     cl.show(cardPanel, "inventoryPanel");
                 } else if (buttonText.equals("Thống Kê")) {
-                    cl.show(cardPanel, "Panel 1");
+                    cl.show(cardPanel, "statsPanel");
                 } else if (buttonText.equals("Trợ Giúp")) {
                     cl.show(cardPanel, "supportPanel");
                 } else if (buttonText.equals("Đăng Xuất")) {
