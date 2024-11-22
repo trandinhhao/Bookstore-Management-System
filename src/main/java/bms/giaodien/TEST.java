@@ -88,10 +88,9 @@ public class TEST extends JFrame {
         //
         // TẠO CÁC PANEL KHÁC NHAU, MỌI NGƯỜI TỰ THÊM VÀO ĐÂY----------------------
         //
-        JPanel defaultPanel = new JPanel();
-        defaultPanel.setBackground(Color.lightGray);
-        defaultPanel.add(new JLabel("Giao diện lúc mới vào"));
-        cardPanel.add(defaultPanel, "default");
+        // Welcome
+        GUIWelcome welcomePanel = new GUIWelcome();
+        cardPanel.add(welcomePanel, "welcomePanel");
         // 2 panel test cho mọi người hiểu
         JPanel panel1 = new JPanel();
         panel1.setBackground(Color.BLACK);

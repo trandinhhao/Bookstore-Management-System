@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class GUIBill extends JFrame {
+
     private JTextField productIdField;
     private JTextField quantityField;
     private JTextField productTypeField;
@@ -18,12 +19,12 @@ public class GUIBill extends JFrame {
     private JButton createBillButton;
     private JButton searchButton;
     private JLabel totalLabel;
-    
+
     // Labels for product information
     private JLabel productNameLabel;
     private JLabel productPriceLabel;
     private JLabel productStockLabel;
-    
+
     public GUIBill() {
         productNameLabel = new JLabel();
         productPriceLabel = new JLabel();
@@ -126,81 +127,80 @@ public class GUIBill extends JFrame {
     // Helper method để tạo border style thống nhất
     private Border createStyledTitledBorder(String title) {
         return BorderFactory.createTitledBorder(
-            BorderFactory.createLineBorder(new Color(70, 130, 180)), 
-            title,
-            TitledBorder.LEFT,
-            TitledBorder.TOP
+                BorderFactory.createLineBorder(new Color(70, 130, 180)),
+                title,
+                TitledBorder.LEFT,
+                TitledBorder.TOP
         );
     }
-    
-    
-    
+
     private JPanel createProductInfoPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(createStyledTitledBorder("Product Information"));
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
-        
+
         // Initialize labels with placeholder text
         productNameLabel = new JLabel("Name: ");
         productPriceLabel = new JLabel("Price: ");
         productStockLabel = new JLabel("Available Stock: ");
-        
+
         // Add components using GridBagLayout
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         panel.add(productNameLabel, gbc);
-        
+
         gbc.gridy = 1;
         panel.add(productPriceLabel, gbc);
-        
+
         gbc.gridy = 2;
         panel.add(productStockLabel, gbc);
-        
+
         return panel;
     }
-    
+
     private JPanel createInputPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setBorder(createStyledTitledBorder("Create Order"));
-        
+
         panel.add(new JLabel("Quantity:"));
         quantityField = new JTextField(10);
         panel.add(quantityField);
-        
+
         createBillButton = new JButton("Create Bill");
         createBillButton.setBackground(new Color(46, 139, 87));
         createBillButton.setForeground(Color.BLACK);
         panel.add(createBillButton);
-        
+
         return panel;
     }
-    
+
     private JPanel createBillPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBorder(createStyledTitledBorder("Bill Details"));
         panel.setPreferredSize(new Dimension(300, 0));
-        
+
         billArea = new JTextArea();
         billArea.setEditable(false);
         billArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane(billArea);
         panel.add(scrollPane, BorderLayout.CENTER);
-        
+
         totalLabel = new JLabel("Total: 0.00 VNĐ");
         totalLabel.setFont(new Font("Dialog", Font.BOLD, 14));
         totalLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel.add(totalLabel, BorderLayout.SOUTH);
-        
+
         return panel;
     }
-    
+
     private void initializeEventHandlers() {
         searchButton.addActionListener(e -> searchProduct());
         createBillButton.addActionListener(e -> createBill());
 //        TypeProductButton.addActionListener(e -> createTypeProductPanel());
-        
+
         // Add key listener to productIdField
         productIdField.addKeyListener(new KeyAdapter() {
             @Override
@@ -211,35 +211,34 @@ public class GUIBill extends JFrame {
             }
         });
     }
-    
-    private Product getSpesificProduct(String productId, String productType) throws SQLException, ClassNotFoundException{
+
+    private Product getSpesificProduct(String productId, String productType) throws SQLException, ClassNotFoundException {
         Product product = null;
 
-            switch(productType) {
-                case "book":
-                    product = Book.getProductById(productId);
-                    break;
-                case "gift":
-                    product = Gift.getProductById(productId);
-                    break;
-                case "textbook":
-                    product = Textbook.getProductById(productId);
-                    break;
-                case "stationery":
-                    product = Stationery.getProductById(productId);
-                    break;
-                case "notebook":
-                    product = Notebook.getProductById(productId);
-                    break;
-                default:
-                    showError("Please choose a type product!");
-                    clearProductInfo();
-                    return null;
-            }
+        switch (productType) {
+            case "book":
+                product = Book.getProductById(productId);
+                break;
+            case "gift":
+                product = Gift.getProductById(productId);
+                break;
+            case "textbook":
+                product = Textbook.getProductById(productId);
+                break;
+            case "stationery":
+                product = Stationery.getProductById(productId);
+                break;
+            case "notebook":
+                product = Notebook.getProductById(productId);
+                break;
+            default:
+                showError("Please choose a type product!");
+                clearProductInfo();
+                return null;
+        }
         return product;
     }
-            
-    
+
     private void searchProduct() {
         String productId = productIdField.getText().trim();
         String productType = productTypeField.getText().trim().toLowerCase();
@@ -265,57 +264,57 @@ public class GUIBill extends JFrame {
             clearProductInfo();
         }
     }
-    
+
     private void clearProductInfo() {
         productNameLabel.setText("Name: ");
         productPriceLabel.setText("Price: ");
         productStockLabel.setText("Available Stock: ");
     }
-    
+
     private void createBill() {
         String productId = productIdField.getText().trim();
         String quantityStr = quantityField.getText().trim();
         String productType = productTypeField.getText().trim().toLowerCase();
-        
+
         if (productId.isEmpty() || quantityStr.isEmpty()) {
             showError("Please fill in all fields");
             return;
         }
-        
+
         try {
             int quantity = Integer.parseInt(quantityStr);
             String orderId = UUID.randomUUID().toString();
-            
+
             Product product = this.getSpesificProduct(productId, productType);
             if (product == null) {
                 showError("Product not found!");
                 return;
             }
-            
+
             if (product.getQuantity() < quantity) {
                 showError("Insufficient stock!");
                 return;
             }
-            
+
             // Calculate total
             double total = Order.calculateInvoiceTotal(productId, quantity, productType);
-            
+
             // Update stock
             Order.updateProduct(quantity, productId, productType);
-            
+
             // Save order
             Order order = new Order(productId, orderId, new Date(), quantity, total, "Pending");
             order.addOrder();
-            
+
             // Update bill display
             updateBillDisplay(order, product, quantity, total);
-            
+
             // Clear input fields
             quantityField.setText("");
-            
+
             // Show success message
             JOptionPane.showMessageDialog(this, "Bill created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            
+
         } catch (NumberFormatException ex) {
             showError("Please enter a valid quantity");
         } catch (SQLException | ClassNotFoundException ex) {
@@ -323,7 +322,7 @@ public class GUIBill extends JFrame {
             ex.printStackTrace();
         }
     }
-    
+
     private void updateBillDisplay(Order order, Product product, int quantity, double total) {
         StringBuilder bill = new StringBuilder();
         bill.append("===== BILL DETAILS =====\n\n");
@@ -335,22 +334,22 @@ public class GUIBill extends JFrame {
         bill.append("- Quantity: ").append(quantity).append("\n");
         bill.append("\n======================\n");
         bill.append("Total Amount: ").append(String.format("%.2f VNĐ", total)).append("\n");
-        
+
         billArea.setText(bill.toString());
         totalLabel.setText("Total: " + String.format("%.2f VNĐ", total));
     }
-    
+
     private void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         SwingUtilities.invokeLater(() -> {
             new GUIBill().setVisible(true);
         });
