@@ -87,7 +87,7 @@ public class TEST extends JFrame {
 
         JComboBox<String> categoryComboBox = new JComboBox<>(new String[]{"Sách", "Quà lưu niệm", "Vở", "Dụng cụ học tập", "Sách giáo khoa"});
 
-        String[] menuItems = {"Sản Phẩm", "Nhân Viên", "Khách Hàng", "Nhà Cung Cấp", "Hóa Đơn", "Quản Lý Kho", "Thống Kê", "Trợ Giúp", "Đăng Xuất"};
+        String[] menuItems = {"Sản Phẩm", "Nhân Viên", "Khách Hàng", "Chấm Công", "Hóa Đơn", "Quản Lý Kho", "Thống Kê", "Trợ Giúp", "Đăng Xuất"};
         ArrayList<JButton> allButtons = new ArrayList<>();
         panel.add(cardPanel, BorderLayout.CENTER);
         //
@@ -138,7 +138,10 @@ public class TEST extends JFrame {
         // Khach hang
         GUICustomer customerPanel = new GUICustomer();
         cardPanel.add(customerPanel, "customerPanel");
-
+        // GUIAttendance
+        GUIAttendance attendancePanel = new GUIAttendance();
+        cardPanel.add(attendancePanel, "attendancePanel");
+        
         for (String menuItem : menuItems) {
             JButton btn = createMenuButton(menuItem);
             allButtons.add(btn);
@@ -154,8 +157,8 @@ public class TEST extends JFrame {
                     cl.show(cardPanel, "employeePanel");
                 } else if (buttonText.equals("Khách Hàng")) {
                     cl.show(cardPanel, "customerPanel");
-                } else if (buttonText.equals("Nhà Cung Cấp")) {
-                    cl.show(cardPanel, "Panel 2");
+                } else if (buttonText.equals("Chấm Công")) {
+                    cl.show(cardPanel, "attendancePanel");
                 } else if (buttonText.equals("Hóa Đơn")) {
                     cl.show(cardPanel, "billPanel");
                 } else if (buttonText.equals("Quản Lý Kho")) {
