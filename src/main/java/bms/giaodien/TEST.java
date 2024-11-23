@@ -44,7 +44,7 @@ public class TEST extends JFrame {
 
         setSize(1200, 700);
         setLocationRelativeTo(null);
-        splitPane.setDividerLocation(200);
+        splitPane.setDividerLocation(180);
 
     }
 
@@ -52,12 +52,12 @@ public class TEST extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(primaryColor);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 15));
 
         JPanel adminPanel = new JPanel();
         adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
         adminPanel.setBackground(primaryColor);
-        adminPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        adminPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
         JLabel avatarLabel = createCircularAvatar();
         avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -78,7 +78,12 @@ public class TEST extends JFrame {
         adminPanel.add(idLabel);
 
         panel.add(adminPanel);
-        panel.add(Box.createVerticalStrut(20));
+        panel.add(Box.createVerticalStrut(10));
+
+        // Tạo panel chứa các nút
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBackground(primaryColor);
 
         JComboBox<String> categoryComboBox = new JComboBox<>(new String[]{"Sách", "Quà lưu niệm", "Vở", "Dụng cụ học tập", "Sách giáo khoa"});
 
@@ -115,20 +120,25 @@ public class TEST extends JFrame {
         // inventory
         try {
             GUIWarehouse inventoryPanel = new GUIWarehouse();
-            cardPanel.add(inventoryPanel,"inventoryPanel");
+            cardPanel.add(inventoryPanel, "inventoryPanel");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(TEST.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         // Bill
         GUIBill billPanel = new GUIBill();
         cardPanel.add(billPanel.getContentPane(), "billPanel");
-        
+
         // Stats
         GUIStats statsPanel = new GUIStats();
         cardPanel.add(statsPanel.getContentPane(), "statsPanel");
-        
-        
+        // Nhan vien
+        GUIEmployee employeePanel = new GUIEmployee();
+        cardPanel.add(employeePanel, "employeePanel");
+        // Khach hang
+        GUICustomer customerPanel = new GUICustomer();
+        cardPanel.add(customerPanel, "customerPanel");
+
         for (String menuItem : menuItems) {
             JButton btn = createMenuButton(menuItem);
             allButtons.add(btn);
@@ -141,9 +151,9 @@ public class TEST extends JFrame {
                 if (buttonText.equals("Sản Phẩm")) {
                     cl.show(cardPanel, "productPanel");
                 } else if (buttonText.equals("Nhân Viên")) {
-                    cl.show(cardPanel, "Panel 2");
+                    cl.show(cardPanel, "employeePanel");
                 } else if (buttonText.equals("Khách Hàng")) {
-                    cl.show(cardPanel, "Panel 1");
+                    cl.show(cardPanel, "customerPanel");
                 } else if (buttonText.equals("Nhà Cung Cấp")) {
                     cl.show(cardPanel, "Panel 2");
                 } else if (buttonText.equals("Hóa Đơn")) {
@@ -221,9 +231,12 @@ public class TEST extends JFrame {
         button.setFocusPainted(false);
         button.setContentAreaFilled(true);
         button.setOpaque(true);
-        button.setMaximumSize(new Dimension(180, 40));
+        // Điều chỉnh kích thước nút
         button.setPreferredSize(new Dimension(180, 40));
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        button.setMinimumSize(new Dimension(180, 30));
 
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setIconTextGap(10);
 

@@ -83,9 +83,9 @@ public class GUIBill extends JFrame {
 
     private JPanel createProductTypePanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.setBorder(createStyledTitledBorder("Choose type production")); // Sử dụng cùng style border với Search Panel
+        panel.setBorder(createStyledTitledBorder("Chọn loại sản phẩm")); // Sử dụng cùng style border với Search Panel
 
-        panel.add(new JLabel("Product Type:"));
+        panel.add(new JLabel("Loại sản phẩm:"));
         productTypeField = new JTextField(15);
         productTypeField.setEditable(false); // Không cho phép edit trực tiếp
         panel.add(productTypeField);
@@ -110,13 +110,13 @@ public class GUIBill extends JFrame {
 
     private JPanel createSearchPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.setBorder(createStyledTitledBorder("Search Product"));
+        panel.setBorder(createStyledTitledBorder("Tìm kiếm sản phẩm"));
 
-        panel.add(new JLabel("Product ID:"));
+        panel.add(new JLabel("ID sản phẩm:"));
         productIdField = new JTextField(15);
         panel.add(productIdField);
 
-        searchButton = new JButton("Search");
+        searchButton = new JButton("Tìm kiếm");
         searchButton.setBackground(new Color(70, 130, 180));
         searchButton.setForeground(Color.BLACK);
         panel.add(searchButton);
@@ -136,16 +136,16 @@ public class GUIBill extends JFrame {
 
     private JPanel createProductInfoPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(createStyledTitledBorder("Product Information"));
+        panel.setBorder(createStyledTitledBorder("Thông tin sản phẩm"));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
 
         // Initialize labels with placeholder text
-        productNameLabel = new JLabel("Name: ");
-        productPriceLabel = new JLabel("Price: ");
-        productStockLabel = new JLabel("Available Stock: ");
+        productNameLabel = new JLabel("Tên sản phẩm: ");
+        productPriceLabel = new JLabel("Giá: ");
+        productStockLabel = new JLabel("Số lượng còn lại: ");
 
         // Add components using GridBagLayout
         gbc.gridx = 0;
@@ -163,13 +163,13 @@ public class GUIBill extends JFrame {
 
     private JPanel createInputPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.setBorder(createStyledTitledBorder("Create Order"));
+        panel.setBorder(createStyledTitledBorder("Tạo đơn hàng"));
 
-        panel.add(new JLabel("Quantity:"));
+        panel.add(new JLabel("Số lượng:"));
         quantityField = new JTextField(10);
         panel.add(quantityField);
 
-        createBillButton = new JButton("Create Bill");
+        createBillButton = new JButton("Tạo đơn");
         createBillButton.setBackground(new Color(46, 139, 87));
         createBillButton.setForeground(Color.BLACK);
         panel.add(createBillButton);
@@ -179,7 +179,7 @@ public class GUIBill extends JFrame {
 
     private JPanel createBillPanel() {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
-        panel.setBorder(createStyledTitledBorder("Bill Details"));
+        panel.setBorder(createStyledTitledBorder("Thông tin đơn hàng"));
         panel.setPreferredSize(new Dimension(300, 0));
 
         billArea = new JTextArea();
@@ -188,7 +188,7 @@ public class GUIBill extends JFrame {
         JScrollPane scrollPane = new JScrollPane(billArea);
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        totalLabel = new JLabel("Total: 0.00 VNĐ");
+        totalLabel = new JLabel("Thành tiền: 0.00 VNĐ");
         totalLabel.setFont(new Font("Dialog", Font.BOLD, 14));
         totalLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel.add(totalLabel, BorderLayout.SOUTH);
@@ -244,7 +244,7 @@ public class GUIBill extends JFrame {
         String productType = productTypeField.getText().trim().toLowerCase();
 
         if (productId.isEmpty()) {
-            showError("Please enter a Product ID");
+            showError("Hãy nhập vào ID sản phẩm");
             return;
         }
 
@@ -252,23 +252,23 @@ public class GUIBill extends JFrame {
             Product product = this.getSpesificProduct(productId, productType);
 
             if (product != null) {
-                this.productNameLabel.setText("Name: " + product.getName());
-                this.productPriceLabel.setText("Price: " + String.format("%.2f VNĐ", product.getSalePrice()));
-                this.productStockLabel.setText("Available Stock: " + product.getQuantity());
+                this.productNameLabel.setText("Tên sản phẩm: " + product.getName());
+                this.productPriceLabel.setText("Giá: " + String.format("%.2f VNĐ", product.getSalePrice()));
+                this.productStockLabel.setText("Số lượng còn lại: " + product.getQuantity());
             } else {
                 showError("Product not found!");
                 clearProductInfo();
             }
         } catch (Exception ex) {
-            showError("Error searching product: " + ex.getMessage());
+            showError("Lỗi tìm kiếm sản phẩm: " + ex.getMessage());
             clearProductInfo();
         }
     }
 
     private void clearProductInfo() {
-        productNameLabel.setText("Name: ");
-        productPriceLabel.setText("Price: ");
-        productStockLabel.setText("Available Stock: ");
+        productNameLabel.setText("Tên sản phẩm: ");
+        productPriceLabel.setText("Giá: ");
+        productStockLabel.setText("Số lượng còn lại: ");
     }
 
     private void createBill() {
@@ -277,7 +277,7 @@ public class GUIBill extends JFrame {
         String productType = productTypeField.getText().trim().toLowerCase();
 
         if (productId.isEmpty() || quantityStr.isEmpty()) {
-            showError("Please fill in all fields");
+            showError("Điền đầy đủ thông tin vào các ô trống");
             return;
         }
 
@@ -287,12 +287,12 @@ public class GUIBill extends JFrame {
 
             Product product = this.getSpesificProduct(productId, productType);
             if (product == null) {
-                showError("Product not found!");
+                showError("Không tìm thấy sản phẩm!");
                 return;
             }
 
             if (product.getQuantity() < quantity) {
-                showError("Insufficient stock!");
+                showError("Không còn đủ số lượng hàng!");
                 return;
             }
 
@@ -313,10 +313,10 @@ public class GUIBill extends JFrame {
             quantityField.setText("");
 
             // Show success message
-            JOptionPane.showMessageDialog(this, "Bill created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Tạo đơn thành công!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (NumberFormatException ex) {
-            showError("Please enter a valid quantity");
+            showError("Vui lòng nhập số lượng hợp lệ");
         } catch (SQLException | ClassNotFoundException ex) {
             showError("Database error: " + ex.getMessage());
             ex.printStackTrace();
@@ -325,15 +325,15 @@ public class GUIBill extends JFrame {
 
     private void updateBillDisplay(Order order, Product product, int quantity, double total) {
         StringBuilder bill = new StringBuilder();
-        bill.append("===== BILL DETAILS =====\n\n");
-        bill.append("Order ID: ").append(order.getOrderId()).append("\n");
-        bill.append("Date: ").append(new Date()).append("\n\n");
-        bill.append("Product Details:\n");
-        bill.append("- Name: ").append(product.getName()).append("\n");
-        bill.append("- Price: ").append(String.format("%.2f VNĐ", product.getSalePrice())).append("\n");
-        bill.append("- Quantity: ").append(quantity).append("\n");
+        bill.append("===== THÔNG TIN ĐƠN HÀNG =====\n\n");
+        bill.append("ID Đơn hàng: ").append(order.getOrderId()).append("\n");
+        bill.append("Ngày: ").append(new Date()).append("\n\n");
+        bill.append("Thông tin sản phẩm:\n");
+        bill.append("- Tên sản phẩm: ").append(product.getName()).append("\n");
+        bill.append("- Giá: ").append(String.format("%.2f VNĐ", product.getSalePrice())).append("\n");
+        bill.append("- Số lượng: ").append(quantity).append("\n");
         bill.append("\n======================\n");
-        bill.append("Total Amount: ").append(String.format("%.2f VNĐ", total)).append("\n");
+        bill.append("Thành tiền: ").append(String.format("%.2f VNĐ", total)).append("\n");
 
         billArea.setText(bill.toString());
         totalLabel.setText("Total: " + String.format("%.2f VNĐ", total));
