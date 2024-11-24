@@ -71,23 +71,38 @@ public class GUIWarehouse extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         contentPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Panel footer chứa thông tin số lượng sản phẩm ít hơn 100
-        JPanel footerPanel = new JPanel(new BorderLayout());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Thêm padding cho footer
+        // Tạo JPanel cho các footer
+        JPanel footerPanel = new JPanel();
+        footerPanel.setLayout(new BoxLayout(footerPanel, BoxLayout.Y_AXIS)); // Sắp xếp các footer theo chiều dọc
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Tạo các ô vuông màu và label cho footer
+        footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 100", new Color(227, 170, 221, 255)));
+        footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 50", new Color(209, 104, 199, 255)));
+        footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 10", new Color(241, 40, 218, 255)));
+
+        // Thêm footer vào contentPanel
+        contentPanel.add(footerPanel, BorderLayout.SOUTH);
+
+        outerPanel.add(contentPanel, BorderLayout.CENTER);
+        return outerPanel;
+    }
+
+    // Hàm hỗ trợ tạo các phần tử footer
+    private JPanel createFooterItem(String labelText, Color color) {
         JPanel colorPanel = new JPanel();
-        colorPanel.setBackground(new Color(227, 170, 221, 255));
+        colorPanel.setBackground(color);
         colorPanel.setPreferredSize(new Dimension(20, 20)); // Ô vuông nhỏ
         colorPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        // Thêm thông tin "Số lượng sản phẩm ít hơn 100" và in đậm
-        JLabel infoLabel = new JLabel("  Số lượng sản phẩm ít hơn 100");
+        JLabel infoLabel = new JLabel("  " + labelText);
         infoLabel.setFont(new Font("Arial", Font.BOLD, 14)); // In đậm
-        footerPanel.add(colorPanel, BorderLayout.WEST);
-        footerPanel.add(infoLabel, BorderLayout.CENTER);
-        contentPanel.add(footerPanel, BorderLayout.SOUTH);
-        outerPanel.add(contentPanel, BorderLayout.CENTER);
-        return outerPanel;
+
+        JPanel footerItemPanel = new JPanel(new BorderLayout());
+        footerItemPanel.add(colorPanel, BorderLayout.WEST);
+        footerItemPanel.add(infoLabel, BorderLayout.CENTER);
+
+        return footerItemPanel;
     }
 
     private void loadUnifiedInventoryData() throws SQLException, ClassNotFoundException {
@@ -141,14 +156,20 @@ public class GUIWarehouse extends JPanel {
             public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 java.awt.Component comp = defaultRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-                // Kiểm tra nếu giá trị quantity < 100, thay đổi màu nền của dòng
+                // Kiểm tra nếu giá trị quantity < 10, < 50, < 100, thay đổi màu nền của dòng
                 int quantity = (int) table.getValueAt(row, 5); // Cột quantity ở chỉ số 5
-                if (quantity < 100) {
-                    comp.setBackground(new Color(227, 170, 221, 255));  // Màu cho hàng có số lượng nhỏ hơn 100
-                    comp.setForeground(Color.BLACK);
+                if (quantity < 10) {
+                    comp.setBackground(new Color(241, 40, 218, 255));  // Màu đỏ cho hàng có số lượng < 10
+                    comp.setForeground(Color.BLACK); // Đặt màu chữ là trắng
+                } else if (quantity < 50) {
+                    comp.setBackground(new Color(209, 104, 199, 255));  // Màu tím cho hàng có số lượng < 50
+                    comp.setForeground(Color.BLACK); // Đặt màu chữ là trắng
+                } else if (quantity < 100) {
+                    comp.setBackground(new Color(227, 170, 221, 255));  // Màu xanh lá cho hàng có số lượng < 100
+                    comp.setForeground(Color.BLACK); // Đặt màu chữ là trắng
                 } else {
-                    comp.setBackground(Color.WHITE);
-                    comp.setForeground(Color.BLACK);
+                    comp.setBackground(Color.WHITE); // Màu nền trắng cho hàng có số lượng >= 100
+                    comp.setForeground(Color.BLACK); // Màu chữ đen
                 }
 
                 return comp;
