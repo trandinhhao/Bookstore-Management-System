@@ -112,11 +112,10 @@ public class TEST extends JFrame {
         // Ví dụ support nè
         GUISupport supportPanel = new GUISupport();
         cardPanel.add(supportPanel, "supportPanel");
-
-        // inventory
+        //inventory
         try {
-            GUIWarehouse inventoryPanel = new GUIWarehouse();
-            cardPanel.add(inventoryPanel,"inventoryPanel");
+            GUIWarehouse warehousePanel = new GUIWarehouse();
+            cardPanel.add(warehousePanel, "warehousePanel");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(TEST.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,7 +139,7 @@ public class TEST extends JFrame {
                 } else if (buttonText.equals("Hóa Đơn")) {
                     cl.show(cardPanel, "Panel 1");
                 } else if (buttonText.equals("Quản Lý Kho")) {
-                    cl.show(cardPanel, "inventoryPanel");
+                    cl.show(cardPanel, "warehousePanel");
                 } else if (buttonText.equals("Thống Kê")) {
                     cl.show(cardPanel, "Panel 1");
                 } else if (buttonText.equals("Trợ Giúp")) {
@@ -223,7 +222,7 @@ public class TEST extends JFrame {
 
     private JLabel createCircularAvatar() { // OK
         try {
-            BufferedImage defaultImage = ImageIO.read(new File("F:\\sourcecode\\3rd year\\1st term\\Java-OOP\\BTL java\\srcBTL\\Bookstore-Management-System\\src\\main\\java\\bms\\giaodien\\j97.jpg"));
+            BufferedImage defaultImage = ImageIO.read(new File("C:\\Users\\PC\\Desktop\\BMS\\BMS\\src\\main\\java\\bms\\giaodien\\j97.jpg"));
             Graphics2D g2d = defaultImage.createGraphics();
             g2d.setColor(new Color(100, 100, 100));
             g2d.fillOval(0, 0, 80, 80);
