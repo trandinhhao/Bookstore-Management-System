@@ -78,7 +78,7 @@ public class GUIWarehouse extends JPanel {
         // Tạo các phần tử footer
         footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 100", new Color(227, 170, 221, 255)));
         footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 50", new Color(209, 104, 199, 255)));
-        footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 10", new Color(241, 40, 218, 255)));
+        footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 10", new Color(204, 28, 183, 255)));
 
         contentPanel.add(footerPanel, BorderLayout.SOUTH);
         outerPanel.add(contentPanel, BorderLayout.CENTER);
@@ -160,7 +160,7 @@ public class GUIWarehouse extends JPanel {
                 // Kiểm tra nếu giá trị quantity < 10, < 50, < 100, thay đổi màu nền của dòng
                 int quantity = (int) table.getValueAt(row, 5); // Cột quantity ở chỉ số 5
                 if (quantity < 10) {
-                    comp.setBackground(new Color(241, 40, 218, 255));  // Màu đỏ cho hàng có số lượng < 10
+                    comp.setBackground(new Color(204, 28, 183, 255));  // Màu đỏ cho hàng có số lượng < 10
                     comp.setForeground(Color.BLACK); // Đặt màu chữ là trắng
                 } else if (quantity < 50) {
                     comp.setBackground(new Color(209, 104, 199, 255));  // Màu tím cho hàng có số lượng < 50
