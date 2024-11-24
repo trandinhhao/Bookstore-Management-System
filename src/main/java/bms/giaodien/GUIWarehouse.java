@@ -85,31 +85,9 @@ public class GUIWarehouse extends JPanel {
         infoLabel.setFont(new Font("Arial", Font.BOLD, 14)); // In đậm
         footerPanel.add(colorPanel, BorderLayout.WEST);
         footerPanel.add(infoLabel, BorderLayout.CENTER);
-
-        // Tính số lượng sản phẩm ít hơn 100
-        int countLessThan100 = countItemsLessThan100();
-
-        JLabel countLabel = new JLabel(String.valueOf(countLessThan100));
-        footerPanel.add(countLabel, BorderLayout.EAST);
-
         contentPanel.add(footerPanel, BorderLayout.SOUTH);
-
         outerPanel.add(contentPanel, BorderLayout.CENTER);
-
         return outerPanel;
-    }
-
-    private int countItemsLessThan100() {
-        int count = 0;
-        // Lặp qua dữ liệu để đếm số sản phẩm có quantity < 100
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            int quantity = (int) model.getValueAt(i, 5); // Cột quantity ở chỉ số 5
-            if (quantity < 100) {
-                count++;
-            }
-        }
-        return count;
     }
 
     private void loadUnifiedInventoryData() throws SQLException, ClassNotFoundException {
