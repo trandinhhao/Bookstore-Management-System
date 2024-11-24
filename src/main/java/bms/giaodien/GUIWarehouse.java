@@ -71,24 +71,22 @@ public class GUIWarehouse extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         contentPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Tạo JPanel cho các footer
-        JPanel footerPanel = new JPanel();
-        footerPanel.setLayout(new BoxLayout(footerPanel, BoxLayout.Y_AXIS)); // Sắp xếp các footer theo chiều dọc
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Panel footer chứa thông tin số lượng sản phẩm ít hơn 100
+        JPanel footerPanel = new JPanel(new GridLayout(1, 3, 10, 10));  // Sử dụng GridLayout để quản lý các item
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5)); // Thêm padding cho footer
 
-        // Tạo các ô vuông màu và label cho footer
+        // Tạo các phần tử footer
         footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 100", new Color(227, 170, 221, 255)));
         footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 50", new Color(209, 104, 199, 255)));
         footerPanel.add(createFooterItem("Số lượng sản phẩm ít hơn 10", new Color(241, 40, 218, 255)));
 
-        // Thêm footer vào contentPanel
         contentPanel.add(footerPanel, BorderLayout.SOUTH);
-
         outerPanel.add(contentPanel, BorderLayout.CENTER);
+
         return outerPanel;
     }
 
-    // Hàm hỗ trợ tạo các phần tử footer
+    // Hàm hỗ trợ tạo các phần tử footer với padding
     private JPanel createFooterItem(String labelText, Color color) {
         JPanel colorPanel = new JPanel();
         colorPanel.setBackground(color);
@@ -101,6 +99,9 @@ public class GUIWarehouse extends JPanel {
         JPanel footerItemPanel = new JPanel(new BorderLayout());
         footerItemPanel.add(colorPanel, BorderLayout.WEST);
         footerItemPanel.add(infoLabel, BorderLayout.CENTER);
+
+        // Thêm padding cho panel footerItemPanel
+        footerItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Thêm padding (top, left, bottom, right)
 
         return footerItemPanel;
     }
