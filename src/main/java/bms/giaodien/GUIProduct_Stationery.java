@@ -348,6 +348,7 @@ public class GUIProduct_Stationery extends JPanel {
             pstmt.setString(10, txtMaterial.getText());
             pstmt.executeUpdate();
             loadStationeryData();
+            JOptionPane.showMessageDialog(null, "Thêm đồ dùng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error adding stationery: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -369,6 +370,7 @@ public class GUIProduct_Stationery extends JPanel {
             pstmt.setString(10, txtId.getText());
             pstmt.executeUpdate();
             loadStationeryData();
+            JOptionPane.showMessageDialog(null, "Sửa đồ dùng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error updating stationery: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -381,6 +383,7 @@ public class GUIProduct_Stationery extends JPanel {
             pstmt.setString(1, txtId.getText());
             pstmt.executeUpdate();
             loadStationeryData();
+            JOptionPane.showMessageDialog(null, "Xóa đồ dùng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error deleting stationery: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);

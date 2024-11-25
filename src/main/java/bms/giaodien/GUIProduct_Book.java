@@ -374,6 +374,7 @@ public class GUIProduct_Book extends JPanel {
             pstmt.setString(12, txtLanguage.getText());
             pstmt.executeUpdate();
             loadBookData();
+            JOptionPane.showMessageDialog(null, "Thêm sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error adding book: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -397,6 +398,7 @@ public class GUIProduct_Book extends JPanel {
             pstmt.setString(12, txtId.getText());
             pstmt.executeUpdate();
             loadBookData();
+            JOptionPane.showMessageDialog(null, "Sửa sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error editing book: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -409,6 +411,7 @@ public class GUIProduct_Book extends JPanel {
             pstmt.setString(1, txtId.getText());
             pstmt.executeUpdate();
             loadBookData();
+            JOptionPane.showMessageDialog(null, "Xóa sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error deleting book: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);

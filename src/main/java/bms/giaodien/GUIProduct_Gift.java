@@ -338,6 +338,7 @@ public class GUIProduct_Gift extends JPanel {
             pstmt.setString(9, txtMaterial.getText());
             pstmt.executeUpdate();
             loadGiftData();
+            JOptionPane.showMessageDialog(null, "Thêm quà thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error adding gift: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -358,6 +359,7 @@ public class GUIProduct_Gift extends JPanel {
             pstmt.setString(9, txtId.getText());
             pstmt.executeUpdate();
             loadGiftData();
+            JOptionPane.showMessageDialog(null, "Sửa quà thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error editing gift: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -370,6 +372,7 @@ public class GUIProduct_Gift extends JPanel {
             pstmt.setString(1, txtId.getText());
             pstmt.executeUpdate();
             loadGiftData();
+            JOptionPane.showMessageDialog(null, "Xóa quà thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error deleting gift: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);

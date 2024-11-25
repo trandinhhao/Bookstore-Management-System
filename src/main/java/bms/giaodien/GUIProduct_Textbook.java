@@ -374,6 +374,7 @@ public class GUIProduct_Textbook extends JPanel {
             pstmt.setString(15, txtEduLevel.getText());
             pstmt.executeUpdate();
             loadTextbookData();
+            JOptionPane.showMessageDialog(null, "Thêm sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error adding textbook: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -400,6 +401,7 @@ public class GUIProduct_Textbook extends JPanel {
             pstmt.setString(15, txtId.getText());
             pstmt.executeUpdate();
             loadTextbookData();
+            JOptionPane.showMessageDialog(null, "Sửa sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error updating textbook: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -412,6 +414,7 @@ public class GUIProduct_Textbook extends JPanel {
             pstmt.setString(1, txtId.getText());
             pstmt.executeUpdate();
             loadTextbookData();
+            JOptionPane.showMessageDialog(null, "Xóa sách thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error deleting textbook: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);

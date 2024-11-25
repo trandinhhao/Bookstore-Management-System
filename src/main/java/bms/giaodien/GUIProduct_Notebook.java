@@ -356,6 +356,7 @@ public class GUIProduct_Notebook extends JPanel {
             pstmt.setString(11, txtManufacturer.getText());
             pstmt.executeUpdate();
             loadNotebookData();
+            JOptionPane.showMessageDialog(null, "Thêm vở thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error adding notebook: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -378,6 +379,7 @@ public class GUIProduct_Notebook extends JPanel {
             pstmt.setString(11, txtId.getText());
             pstmt.executeUpdate();
             loadNotebookData();
+            JOptionPane.showMessageDialog(null, "Sửa vở thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error updating notebook: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -390,6 +392,7 @@ public class GUIProduct_Notebook extends JPanel {
             pstmt.setString(1, txtId.getText());
             pstmt.executeUpdate();
             loadNotebookData();
+            JOptionPane.showMessageDialog(null, "Xóa vở thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error deleting notebook: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
