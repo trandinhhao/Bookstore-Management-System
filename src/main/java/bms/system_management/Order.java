@@ -1,4 +1,5 @@
 package bms.system_management;
+// DONE
 
 import bms.product.Product;
 import bms.connectDB.ConnectMySQL;
@@ -9,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.*;
 
 public class Order {
+
     private String orderId;
     private String productID;
     private java.util.Date orderDate;
@@ -29,8 +31,7 @@ public class Order {
         this.orderDate = orderDate;
         this.status = status;
     }
-    
-    
+
     public void addOrder() throws SQLException, ClassNotFoundException {
         String sql = "INSERT INTO orders (order_id, product_id, order_date, total_amount, total_price, status) VALUES (?, ?, ?, ?, ?, ?)";
         Connection conn = ConnectMySQL.getConnection();
@@ -145,8 +146,8 @@ public class Order {
         }
         return price * quantity;
     }
-    
-    public String getOrderId(){
+
+    public String getOrderId() {
         return this.orderId;
     }
 }

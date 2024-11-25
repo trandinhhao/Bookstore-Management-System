@@ -1,4 +1,5 @@
 package bms.system_management;
+// DONE
 
 import bms.connectDB.ConnectMySQL;
 import java.sql.SQLException;
@@ -8,7 +9,6 @@ import java.sql.ResultSet;
 import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
-
 
 public class Stats {
 
@@ -33,11 +33,9 @@ public class Stats {
             pstmt.setDate(3, new java.sql.Date(this.generatedDate.getTime()));
             pstmt.setString(4, this.content);
             pstmt.executeUpdate();
-            
+
         }
     }
-
-
 
 //    public static Stats generateAdvancedSalesReport(Date startDate, Date endDate) throws SQLException, ClassNotFoundException {
 //        Connection conn = ConnectMySQL.getConnection();
@@ -66,8 +64,7 @@ public class Stats {
 //        report.addReport();
 //        return report;
 //    }
-    
-        // Bổ sung thêm vào file .java
+    // Bổ sung thêm vào file .java
     public static Stats generateAdvancedSalesReport(Date startDate, Date endDate, String productType) throws SQLException, ClassNotFoundException {
         Connection conn = ConnectMySQL.getConnection();
         StringBuilder content = new StringBuilder();
@@ -78,7 +75,7 @@ public class Stats {
                 + "WHERE order_date BETWEEN ? AND ?";
 
         // 2. Top 5 sản phẩm bán chạy nhất
-        String topProductsSql =String.format("SELECT p.id, p.name, p.sale_price, SUM(o.total_amount) as total_sold "
+        String topProductsSql = String.format("SELECT p.id, p.name, p.sale_price, SUM(o.total_amount) as total_sold "
                 + "FROM orders o "
                 + "INNER JOIN %s p ON o.product_id = p.id "
                 + "WHERE o.order_date BETWEEN ? AND ? "
@@ -94,7 +91,6 @@ public class Stats {
                 + "GROUP BY p.id, p.name, p.sale_price "
                 + "ORDER BY total_sold ASC "
                 + "LIMIT 5;", productType);
-
 
         try {
             // Lấy tổng doanh thu
@@ -123,11 +119,11 @@ public class Stats {
                 pstmt.setDate(2, new java.sql.Date(endDate.getTime()));
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    content.append(String.format(" %-30s %-30s %-30s %-10d\n", 
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getDouble("sale_price"),
-                        rs.getInt("total_sold")));
+                    content.append(String.format(" %-30s %-30s %-30s %-10d\n",
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getDouble("sale_price"),
+                            rs.getInt("total_sold")));
                 }
             }
 
@@ -142,23 +138,25 @@ public class Stats {
                 pstmt.setDate(2, new java.sql.Date(endDate.getTime()));
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    content.append(String.format("%-30s %-30s %-30s %-10d\n", 
-                        rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getDouble("sale_price"),
-                        rs.getInt("total_sold")));
+                    content.append(String.format("%-30s %-30s %-30s %-10d\n",
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getDouble("sale_price"),
+                            rs.getInt("total_sold")));
                 }
             }
         } finally {
-            if (conn != null) conn.close();
+            if (conn != null) {
+                conn.close();
+            }
         }
 
         Stats report = new Stats("Advanced Sales Report", new Date(), content.toString());
         report.addReport();
         return report;
     }
-    
-    public String getContent(){
+
+    public String getContent() {
         return this.content;
     }
 }
