@@ -1,4 +1,6 @@
 package bms.giaodien;
+// DONE
+
 import bms.connectDB.ConnectMySQL;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -13,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GUIAttendance extends JPanel {
+
     private JTextField txtEmployeeId;
     private JTable tableAttendance;
     private DefaultTableModel tableModel;
@@ -25,20 +28,19 @@ public class GUIAttendance extends JPanel {
     }
 
     private void initComponents() {
-        // Tạo panel chính
+        // Panel chính
         JPanel mainPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(mainPanel, BorderLayout.CENTER);
 
-        // Tạo panel trái (Chấm công)
+        // Panel trái (Chấm công)
         JPanel leftPanel = new JPanel(new GridBagLayout());
         leftPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), "Chấm công", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 14)));
 
-        // Tạo panel phải (Kiểm tra)
+        // Panel phải (Kiểm tra)
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), "Kiểm tra chấm công", TitledBorder.LEADING, TitledBorder.TOP, new Font("Arial", Font.BOLD, 14)));
 
-        // Thêm vào mainPanel
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
 
@@ -65,7 +67,7 @@ public class GUIAttendance extends JPanel {
         btnMarkAttendance.setBackground(new Color(0, 153, 76));
         btnMarkAttendance.setForeground(Color.BLACK);
 
-        // Sự kiện nút chấm công
+        // Nhấn nút chấm công
         btnMarkAttendance.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -206,7 +208,7 @@ public class GUIAttendance extends JPanel {
         checkAttendance();
     }
 
-    // Hàm chạy thử GUI
+    // TEST
     public static void main(String[] args) {
         JFrame frame = new JFrame("Quản lý chấm công");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

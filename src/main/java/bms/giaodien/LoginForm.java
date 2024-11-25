@@ -135,7 +135,7 @@ public class LoginForm extends JFrame {
         });
     }
 
-    // Hàm chạy giao diện test
+    // TEST
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             LoginForm loginUI = new LoginForm();

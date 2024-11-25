@@ -1,4 +1,5 @@
 package bms.giaodien;
+// DONE
 
 import bms.work.ForgotPassword;
 import javax.swing.*;
@@ -70,14 +71,14 @@ public class ForgotPasswordForm extends JFrame {
         gbc.gridwidth = 2;
         add(btnResetPassword, gbc);
 
-        // Hành động khi nhấn nút Reset Password
+        // Nhấn nút Reset Password
         btnResetPassword.addActionListener((ActionEvent e) -> {
             String id = txtId.getText();
             String username = txtUsername.getText();
             String newPassword = new String(txtNewPassword.getPassword());
             String confirmPassword = new String(txtConfirmPassword.getPassword());
 
-            // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp không
+            // Kiểm tra mật khẩu mới có khớp không
             if (!newPassword.equals(confirmPassword)) {
                 JOptionPane.showMessageDialog(null, "Mật khẩu xác nhận không khớp!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -89,7 +90,7 @@ public class ForgotPasswordForm extends JFrame {
                 int result = forgotPassword.resetPassword(id, username, newPassword);
                 if (result == 1) {
                     JOptionPane.showMessageDialog(null, "Đặt mật khẩu mới thành công!");
-                    dispose(); // tắt cái cửa sổ quên mk này đi
+                    dispose(); // Tắt cái cửa sổ quên mk này đi
                 } else if (result == 2) {
                     JOptionPane.showMessageDialog(null, "Đặt lại thất bại, vui lòng thử lại.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -108,7 +109,8 @@ public class ForgotPasswordForm extends JFrame {
         });
     }
 
-    public static void main(String[] args) { // TEST
+    // TEST
+    public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             ForgotPasswordForm forgotPasswordUI = new ForgotPasswordForm();
             forgotPasswordUI.setVisible(true);

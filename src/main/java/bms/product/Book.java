@@ -79,13 +79,13 @@ public class Book extends Product {
             // Thong bao xoa khong thanh cong, yeu cau nhap lai id
         }
     }
-    
+
     public static Book getProductById(String productId) throws SQLException, ClassNotFoundException {
         String sqlString = "SELECT * FROM book WHERE id= ?";
         Connection con = ConnectMySQL.getConnection();
-        try(PreparedStatement stmt = con.prepareStatement(sqlString)){
+        try (PreparedStatement stmt = con.prepareStatement(sqlString)) {
             stmt.setString(1, productId);
-            try(ResultSet rs = stmt.executeQuery()){
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Book(
                             rs.getString("author"),
