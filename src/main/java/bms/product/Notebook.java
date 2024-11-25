@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Notebook extends Product {
+
     private int pageCount;
     private String paperType;
     private String size;
@@ -84,13 +85,13 @@ public class Notebook extends Product {
             // Thong bao cap nhat khong thanh cong, yeu cau nhap lai thong tin
         }
     }
-    
+
     public static Notebook getProductById(String productId) throws SQLException, ClassNotFoundException {
         String sqlString = "SELECT * FROM notebook WHERE id= ?";
         Connection con = ConnectMySQL.getConnection();
-        try(PreparedStatement stmt = con.prepareStatement(sqlString)){
+        try (PreparedStatement stmt = con.prepareStatement(sqlString)) {
             stmt.setString(1, productId);
-            try(ResultSet rs = stmt.executeQuery()){
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Notebook(
                             rs.getInt("page_count"),
