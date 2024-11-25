@@ -1,4 +1,5 @@
 package bms.giaodien;
+// DONE
 
 import bms.connectDB.ConnectMySQL;
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class GUICustomer extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5); // Tạo khoảng cách giữa các ô
         gbc.fill = GridBagConstraints.HORIZONTAL; // Đặt các ô nhập liệu giãn theo chiều ngang
 
-// Hàng 1
+        // Hàng 1
         gbc.gridx = 0;
         gbc.gridy = 0;
         inputPanel.add(new JLabel("Mã KH:"), gbc);
@@ -65,7 +66,7 @@ public class GUICustomer extends JPanel {
         gbc.gridy = 0;
         inputPanel.add(txtAddress = new JTextField(15), gbc);
 
-// Hàng 2
+        // Hàng 2
         gbc.gridx = 0;
         gbc.gridy = 1;
         inputPanel.add(new JLabel("Số ĐT:"), gbc);
@@ -98,7 +99,7 @@ public class GUICustomer extends JPanel {
         gbc.gridy = 1;
         inputPanel.add(txtRegisterDate = new JTextField(15), gbc);
 
-// Hàng 3
+        // Hàng 3
         gbc.gridx = 0;
         gbc.gridy = 2;
         inputPanel.add(new JLabel("Hạng hội viên:"), gbc);
@@ -356,6 +357,7 @@ public class GUICustomer extends JPanel {
         }
     }
 
+    // TEST
     public static void main(String[] args) {
         JFrame frame = new JFrame("Quản lý khách hàng");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,4 +1,5 @@
 package bms.giaodien;
+// DONE
 
 import bms.system_management.Order;
 import bms.product.*;
@@ -343,6 +344,7 @@ public class GUIBill extends JFrame {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    // TEST
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

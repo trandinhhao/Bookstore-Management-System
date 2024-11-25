@@ -1,4 +1,5 @@
 package bms.giaodien;
+// DONE
 
 import bms.connectDB.ConnectMySQL;
 
@@ -355,7 +356,8 @@ public class GUIEmployee extends JPanel {
             return c;
         }
     }
-
+    
+    // TEST
     public static void main(String[] args) {
         JFrame frame = new JFrame("Quản lý nhân viên");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

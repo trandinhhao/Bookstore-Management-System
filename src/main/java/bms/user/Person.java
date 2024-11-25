@@ -1,6 +1,8 @@
 package bms.user;
+// DONE
 
 public class Person {
+
     protected String id;
     protected String name;
     protected String birth;
@@ -16,5 +18,5 @@ public class Person {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
-    
+
 }

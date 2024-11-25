@@ -1,4 +1,5 @@
 package bms.giaodien;
+// DONE
 
 import bms.connectDB.ConnectMySQL;
 
@@ -20,11 +21,11 @@ public class GUIWarehouse extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // Tạo bảng hiển thị
+        // Tạo bảng
         JPanel tablePanel = createUnifiedInventoryTablePanel();
         add(tablePanel, BorderLayout.CENTER);
 
-        // Load dữ liệu vào bảng
+        // Load data
         loadUnifiedInventoryData();
     }
 
@@ -32,14 +33,12 @@ public class GUIWarehouse extends JPanel {
         // Panel chứa toàn bộ giao diện (header không bị đóng khung)
         JPanel outerPanel = new JPanel(new BorderLayout());
 
-        // Panel chứa header (không đóng khung)
         JPanel headerPanel = new JPanel(new BorderLayout());
         JLabel headerLabel = new JLabel("Tổng hợp kho hàng", JLabel.CENTER);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(headerLabel, BorderLayout.CENTER);
         outerPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // Panel chứa nút Refresh
         JPanel buttonPanel = new JPanel();
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(e -> {
@@ -178,31 +177,19 @@ public class GUIWarehouse extends JPanel {
         });
     }
 
+    // TEST
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                // Set the look and feel to match the system
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-                // Create a new JFrame to hold the panel
                 JFrame frame = new JFrame("Tổng hợp kho hàng");
-
-                // Create an instance of the GUIWarehouse panel
                 GUIWarehouse warehouse = new GUIWarehouse();
-
-                // Add the panel to the frame
                 frame.add(warehouse);
-
-                // Set default close operation
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-                // Pack the frame to fit the preferred size of its components
                 frame.setSize(800, 600);
 
-                // Center the frame on the screen
                 frame.setLocationRelativeTo(null);
 
-                // Make the frame visible
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
