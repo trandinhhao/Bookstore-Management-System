@@ -1,4 +1,5 @@
 package bms.giaodien;
+// DONE
 
 import bms.connectDB.ConnectMySQL;
 import javax.swing.*;
@@ -9,15 +10,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class GUIProduct_Gift extends JPanel {
 
     private JTable giftTable;
     private DefaultTableModel tableModel;
+    private JCheckBox cbgiftId, cbgiftName, cbgifttype;
     private JTextField txtId, txtName, txtCostPrice, txtSalePrice, txtQuantity, txtUnit,
             txtOrigin, txtType, txtMaterial;
+    private JTextField txtSearch;
 
     public GUIProduct_Gift() {
         setLayout(new BorderLayout());
@@ -110,6 +115,22 @@ public class GUIProduct_Gift extends JPanel {
 
         topPanel.add(inputPanel, BorderLayout.CENTER);
 
+        JPanel searchPanel = new JPanel(new FlowLayout());
+        searchPanel.add(new JLabel("Tìm kiếm:"));
+        txtSearch = new JTextField(20);
+        searchPanel.add(txtSearch);
+        JButton btnSearch = new JButton("Tìm kiếm");
+        searchPanel.add(btnSearch);
+        JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        cbgiftId = new JCheckBox("Mã quà");
+        cbgiftName = new JCheckBox("Tên quà");
+        cbgifttype = new JCheckBox("Loại quà");
+        checkBoxPanel.add(cbgiftId);
+        checkBoxPanel.add(cbgiftName);
+        checkBoxPanel.add(cbgifttype);
+        searchPanel.add(checkBoxPanel, BorderLayout.CENTER);
+        topPanel.add(searchPanel, BorderLayout.NORTH);
+
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton btnAdd = new JButton("Thêm");
         JButton btnEdit = new JButton("Sửa");
@@ -129,6 +150,8 @@ public class GUIProduct_Gift extends JPanel {
         giftTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(giftTable);
         add(scrollPane, BorderLayout.CENTER);
+
+        btnSearch.addActionListener(e -> searchGift(txtSearch.getText()));
 
         btnAdd.addActionListener(e -> addGift());
         btnEdit.addActionListener(e -> editGift());
@@ -170,6 +193,134 @@ public class GUIProduct_Gift extends JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading gift data: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void searchGift(String keyword) {
+        tableModel.setRowCount(0);  // Xóa dữ liệu hiện tại trên bảng
+
+        // Bắt đầu câu lệnh SQL
+        StringBuilder query = new StringBuilder("SELECT * FROM gift WHERE 1=1");
+        java.util.List<String> selectedCriteria = new ArrayList<>();
+
+        // Kiểm tra các checkbox và thêm vào danh sách điều kiện
+        if (cbgiftId.isSelected()) {
+            query.append(" AND id LIKE ?");
+            selectedCriteria.add("Mã quà");
+        }
+        if (cbgiftName.isSelected()) {
+            query.append(" AND name LIKE ?");
+            selectedCriteria.add("Tên quà");
+        }
+        if (cbgifttype.isSelected()) {
+            query.append(" AND type LIKE ?");
+            selectedCriteria.add("Loại quà");
+        }
+
+        if (selectedCriteria.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một tiêu chí tìm kiếm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Thực thi câu truy vấn với các tiêu chí đã chọn
+        try (Connection con = ConnectMySQL.getConnection(); PreparedStatement pstmt = con.prepareStatement(query.toString())) {
+            // Thiết lập các tham số trong PreparedStatement
+            int paramIndex = 1;
+            for (int i = 0; i < selectedCriteria.size(); i++) {
+                pstmt.setString(paramIndex++, "%" + keyword + "%");
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getString("id"), rs.getString("name"), rs.getDouble("cost_price"),
+                    rs.getDouble("sale_price"), rs.getInt("quantity"), rs.getString("unit"),
+                    rs.getString("origin"), rs.getString("type"), rs.getString("material")
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error searching for gifts: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void searchGift(String keyword, boolean searchById, boolean searchByName, boolean searchByAuthor, boolean searchByPublisher, boolean searchByGenre) {
+        tableModel.setRowCount(0);
+        StringBuilder query = new StringBuilder("SELECT * FROM gift WHERE 1=1");
+
+        if (!keyword.isEmpty()) {
+            if (searchById) {
+                query.append(" AND id LIKE ?");
+            }
+            if (searchByName) {
+                query.append(" AND name LIKE ?");
+            }
+            if (searchByAuthor) {
+                query.append(" AND type LIKE ?");
+            }
+
+        }
+
+        try (Connection con = ConnectMySQL.getConnection(); PreparedStatement pstmt = con.prepareStatement(query.toString())) {
+            int paramIndex = 1;
+            if (!keyword.isEmpty()) {
+                if (searchById) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByName) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByAuthor) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByPublisher) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByGenre) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getString("id"), rs.getString("name"), rs.getDouble("cost_price"),
+                    rs.getDouble("sale_price"), rs.getInt("quantity"), rs.getString("unit"),
+                    rs.getString("origin"), rs.getString("author"), rs.getString("publisher"),
+                    rs.getInt("publicationYear"), rs.getString("genre"), rs.getString("language")
+                });
+            }
+            giftTable.setDefaultRenderer(Object.class, new CustomTableCellRenderer(keyword));
+            giftTable.repaint();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error searching for books: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private class CustomTableCellRenderer extends DefaultTableCellRenderer {
+
+        private final String keyword;
+
+        // Constructor nhận từ khóa
+        public CustomTableCellRenderer(String keyword) {
+            this.keyword = keyword.toLowerCase();
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (value != null && keyword != null && !keyword.isEmpty()) {
+                String cellValue = value.toString().toLowerCase();
+                if (cellValue.contains(keyword)) {
+                    c.setBackground(Color.YELLOW);
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
+            } else {
+                c.setBackground(Color.WHITE);
+            }
+            return c;
         }
     }
 
@@ -224,7 +375,7 @@ public class GUIProduct_Gift extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     // TEST
     public static void main(String[] args) {
         JFrame frame = new JFrame("TEST");

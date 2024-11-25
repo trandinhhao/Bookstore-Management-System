@@ -107,17 +107,9 @@ public class TEST extends JFrame {
         panel2.setBackground(Color.LIGHT_GRAY);
         panel2.add(new JLabel("Đây là Panel 2"));
         cardPanel.add(panel2, "Panel 2");
-        // Ví dụ product nè
-//        try {
-//            GUIProduct productPanel = new GUIProduct();
-//            cardPanel.add(productPanel, "productPanel");
-//        } catch (ClassNotFoundException | SQLException ex) {
-//            Logger.getLogger(TEST.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         // Ví dụ support nè
         GUISupport supportPanel = new GUISupport();
         cardPanel.add(supportPanel, "supportPanel");
-
         // inventory
         try {
             GUIWarehouse inventoryPanel = new GUIWarehouse();
@@ -125,11 +117,9 @@ public class TEST extends JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(TEST.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         // Bill
         GUIBill billPanel = new GUIBill();
         cardPanel.add(billPanel.getContentPane(), "billPanel");
-
         // Stats
         GUIStats statsPanel = new GUIStats();
         cardPanel.add(statsPanel.getContentPane(), "statsPanel");
@@ -142,7 +132,10 @@ public class TEST extends JFrame {
         // GUIAttendance
         GUIAttendance attendancePanel = new GUIAttendance();
         cardPanel.add(attendancePanel, "attendancePanel");
-        
+        // GUIProduct
+        GUIProduct productPanel = new GUIProduct();
+        cardPanel.add(productPanel, "productPanel");
+
         for (String menuItem : menuItems) {
             JButton btn = createMenuButton(menuItem);
             allButtons.add(btn);
@@ -153,7 +146,7 @@ public class TEST extends JFrame {
                 // Kiểm tra tên nút và thực hiện hành động tương ứng
                 CardLayout cl = (CardLayout) (cardPanel.getLayout());
                 if (buttonText.equals("Sản Phẩm")) {
-                    cl.show(cardPanel, "colorPanel");
+                    cl.show(cardPanel, "productPanel");
                 } else if (buttonText.equals("Nhân Viên")) {
                     cl.show(cardPanel, "employeePanel");
                 } else if (buttonText.equals("Khách Hàng")) {

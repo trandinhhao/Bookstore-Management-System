@@ -9,15 +9,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class GUIProduct_Stationery extends JPanel {
 
     private JTable stationeryTable;
     private DefaultTableModel tableModel;
     private JTextField txtId, txtName, txtCostPrice, txtSalePrice, txtQuantity, txtUnit,
-            txtOrigin, txtType, txtManufacturer, txtMaterial;
+            txtOrigin, txtType, txtManufacturer, txtMaterial, txtSearch;
+    private JCheckBox cbId, cbName, cbManufacturer;  // Checkbox tìm kiếm
+    private JButton btnSearch;
 
     public GUIProduct_Stationery() {
         setLayout(new BorderLayout());
@@ -130,9 +134,26 @@ public class GUIProduct_Stationery extends JPanel {
 
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(topPanel, BorderLayout.NORTH);
+        JPanel searchPanel = new JPanel(new FlowLayout());
+        searchPanel.add(new JLabel("Từ khóa tìm kiếm:"));
+        txtSearch = new JTextField(15);
+        btnSearch = new JButton("Tìm kiếm");
+        searchPanel.add(txtSearch);
+        searchPanel.add(btnSearch);
+
+        JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        cbId = new JCheckBox("Mã");
+        cbName = new JCheckBox("Tên");
+        cbManufacturer = new JCheckBox("Nhà sản xuất");
+        checkBoxPanel.add(cbId);
+        checkBoxPanel.add(cbName);
+        checkBoxPanel.add(cbManufacturer);
+        searchPanel.add(checkBoxPanel, BorderLayout.CENTER);
+        topPanel.add(searchPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"Mã", "Tên", "Giá nhập", "Giá bán", "Số lượng", "Đơn vị",
             "Xuất xứ", "Loại sản phẩm", "Nhà sản xuất", "Chất liệu"};
+        btnSearch.addActionListener(e -> searchStationery(txtSearch.getText()));
         tableModel = new DefaultTableModel(columnNames, 0);
         stationeryTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(stationeryTable);
@@ -180,6 +201,135 @@ public class GUIProduct_Stationery extends JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading stationery data: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void searchStationery(String keyword) {
+        tableModel.setRowCount(0);  // Xóa dữ liệu hiện tại trên bảng
+
+        // Bắt đầu câu lệnh SQL
+        StringBuilder query = new StringBuilder("SELECT * FROM stationery WHERE 1=1");
+        java.util.List<String> selectedCriteria = new ArrayList<>();
+
+        // Kiểm tra các checkbox và thêm vào danh sách điều kiện
+        if (cbId.isSelected()) {
+            query.append(" AND id LIKE ?");
+            selectedCriteria.add("Mã quà");
+        }
+        if (cbName.isSelected()) {
+            query.append(" AND name LIKE ?");
+            selectedCriteria.add("Tên quà");
+        }
+        if (cbManufacturer.isSelected()) {
+            query.append(" AND manufacturer LIKE ?");
+            selectedCriteria.add("Nhà sản xuất");
+        }
+
+        if (selectedCriteria.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một tiêu chí tìm kiếm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Thực thi câu truy vấn với các tiêu chí đã chọn
+        try (Connection con = ConnectMySQL.getConnection(); PreparedStatement pstmt = con.prepareStatement(query.toString())) {
+            // Thiết lập các tham số trong PreparedStatement
+            int paramIndex = 1;
+            for (int i = 0; i < selectedCriteria.size(); i++) {
+                pstmt.setString(paramIndex++, "%" + keyword + "%");
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getString("id"), rs.getString("name"), rs.getDouble("cost_price"),
+                    rs.getDouble("sale_price"), rs.getInt("quantity"), rs.getString("unit"),
+                    rs.getString("origin"), rs.getString("type"),
+                    rs.getString("manufacturer"), rs.getString("material")
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error searching for gifts: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void searchStationery(String keyword, boolean searchById, boolean searchByName, boolean searchByAuthor, boolean searchByPublisher, boolean searchByGenre) {
+        tableModel.setRowCount(0);
+        StringBuilder query = new StringBuilder("SELECT * FROM gift WHERE 1=1");
+
+        if (!keyword.isEmpty()) {
+            if (searchById) {
+                query.append(" AND id LIKE ?");
+            }
+            if (searchByName) {
+                query.append(" AND name LIKE ?");
+            }
+            if (searchByAuthor) {
+                query.append(" AND manufacturer LIKE ?");
+            }
+
+        }
+
+        try (Connection con = ConnectMySQL.getConnection(); PreparedStatement pstmt = con.prepareStatement(query.toString())) {
+            int paramIndex = 1;
+            if (!keyword.isEmpty()) {
+                if (searchById) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByName) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByAuthor) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByPublisher) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+                if (searchByGenre) {
+                    pstmt.setString(paramIndex++, "%" + keyword + "%");
+                }
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getString("id"), rs.getString("name"), rs.getDouble("cost_price"),
+                    rs.getDouble("sale_price"), rs.getInt("quantity"), rs.getString("unit"),
+                    rs.getString("origin"), rs.getString("author"), rs.getString("publisher"),
+                    rs.getInt("publicationYear"), rs.getString("genre"), rs.getString("language")
+                });
+            }
+            stationeryTable.setDefaultRenderer(Object.class, new CustomTableCellRenderer(keyword));
+            stationeryTable.repaint();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error searching for books: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private class CustomTableCellRenderer extends DefaultTableCellRenderer {
+
+        private final String keyword;
+
+        // Constructor nhận từ khóa
+        public CustomTableCellRenderer(String keyword) {
+            this.keyword = keyword.toLowerCase();
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (value != null && keyword != null && !keyword.isEmpty()) {
+                String cellValue = value.toString().toLowerCase();
+                if (cellValue.contains(keyword)) {
+                    c.setBackground(Color.YELLOW);
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
+            } else {
+                c.setBackground(Color.WHITE);
+            }
+            return c;
         }
     }
 
@@ -236,7 +386,7 @@ public class GUIProduct_Stationery extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     // TEST
     public static void main(String[] args) {
         JFrame frame = new JFrame("TEST");
