@@ -226,7 +226,7 @@ public class GUICustomer extends JPanel {
             JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công!");
             loadCustomerData();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error adding customer: " + e.getMessage(),
+            JOptionPane.showMessageDialog(this, "Lỗi thêm mới khách hàng: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -250,7 +250,7 @@ public class GUICustomer extends JPanel {
                 JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
                 loadCustomerData();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error updating customer: " + e.getMessage(),
+                JOptionPane.showMessageDialog(this, "Lỗi chỉnh sửa khách hàng: " + e.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
@@ -267,7 +267,7 @@ public class GUICustomer extends JPanel {
                 JOptionPane.showMessageDialog(this, "Xóa thành công!");
                 loadCustomerData();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error deleting customer: " + e.getMessage(),
+                JOptionPane.showMessageDialog(this, "Lỗi xóa khách hàng: " + e.getMessage(),
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {

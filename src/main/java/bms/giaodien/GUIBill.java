@@ -256,7 +256,7 @@ public class GUIBill extends JFrame {
                 this.productPriceLabel.setText("Giá: " + String.format("%.2f VNĐ", product.getSalePrice()));
                 this.productStockLabel.setText("Số lượng còn lại: " + product.getQuantity());
             } else {
-                showError("Product not found!");
+                showError("Lỗi tìm kiếm sản phẩm!");
                 clearProductInfo();
             }
         } catch (Exception ex) {

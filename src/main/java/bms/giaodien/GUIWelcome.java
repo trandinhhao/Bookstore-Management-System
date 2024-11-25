@@ -21,7 +21,7 @@ public class GUIWelcome extends JPanel {
                 {"1. Để kiểm tra quản lý Sản phẩm", "Nhấn vào nút \"Sản Phẩm\""},
                 {"2. Để kiểm tra quản lý Nhân Viên", "Nhấn vào nút \"Nhân Viên\""},
                 {"3. Để kiểm tra quản lý Khách Hàng", "Nhấn vào nút \"Khách Hàng\""},
-                {"4. Để kiểm tra quản lý Nhà Cung Cấp", "Nhấn vào nút \"Nhà Cung Cấp\""},
+                {"4. Để kiểm tra quản lý Chấm Công", "Nhấn vào nút \"Chấm Công\""},
                 {"5. Để tạo Hóa Đơn", "Nhấn vào nút \"Hóa Đơn\""},
                 {"6. Để kiểm tra quản lý Kho Hàng", "Nhấn vào nút \"Quản Lý Kho\""},
                 {"7. Để kiểm tra Thống Kê", "Nhấn vào nút \"Thống Kê\""},

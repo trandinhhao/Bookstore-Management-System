@@ -69,7 +69,7 @@ public class LoginForm extends JFrame {
         // Nút Login
         JButton btnLogin = new JButton("Đăng nhập");
         btnLogin.setBackground(new Color(76, 175, 80));  // Màu xanh như trong hình
-        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setForeground(Color.BLACK);
         btnLogin.setFocusPainted(false);
         gbc.gridx = 0;
         gbc.gridy = 3;

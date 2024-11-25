@@ -211,7 +211,7 @@ public class GUIEmployee extends JPanel {
             JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
             loadEmployeeData();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error adding employee: " + e.getMessage(),
+            JOptionPane.showMessageDialog(this, "Lỗi thêm mới nhân viên: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
