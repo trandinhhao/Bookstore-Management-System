@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-public class TEST extends JFrame {
+public class MenuForm extends JFrame {
 
     private Color primaryColor = new Color(195, 199, 243, 255);
     private Color textColor = new Color(50, 50, 50);
@@ -25,7 +25,7 @@ public class TEST extends JFrame {
     private String id;
     private JPanel cardPanel = new JPanel(new CardLayout());
 
-    public TEST(String username, String id) {
+    public MenuForm(String username, String id) {
         this.username = username;
         this.id = id;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,7 +115,7 @@ public class TEST extends JFrame {
             GUIWarehouse inventoryPanel = new GUIWarehouse();
             cardPanel.add(inventoryPanel, "inventoryPanel");
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(TEST.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MenuForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         // Bill
         GUIBill billPanel = new GUIBill();
@@ -286,7 +286,7 @@ public class TEST extends JFrame {
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                TEST gui = new TEST("Admin", "001");
+                MenuForm gui = new MenuForm("Admin", "001");
                 gui.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();

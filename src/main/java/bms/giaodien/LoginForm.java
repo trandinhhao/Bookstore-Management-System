@@ -112,7 +112,7 @@ public class LoginForm extends JFrame {
 
                         }
                         try {
-                            new TEST(username, log1.getID(username)).setVisible(true);
+                            new MenuForm(username, log1.getID(username)).setVisible(true);
                         } catch (ClassNotFoundException | SQLException ex) {
                             Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
                         }
