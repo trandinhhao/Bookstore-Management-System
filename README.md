@@ -23,7 +23,8 @@ Hệ thống quản lý nhà sách được xây dựng nhằm tin học hóa c�
 
 ## 🛠 Công nghệ sử dụng
 
-- Java Core & Java Swing  
+- Java Core & Java Swing
+- JDBC
 - MySQL Database  
 - Apache NetBeans IDE 22  
 - Git & GitHub  
