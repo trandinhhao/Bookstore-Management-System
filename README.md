@@ -171,10 +171,3 @@ bookstore-management/
 ## 📝 License
 
 Dự án phục vụ mục đích học tập. Không sử dụng cho mục đích thương mại nếu không được cho phép.
-
-```
-
----
-
-👉 Nếu bạn cần mình tạo file `.md` để tải về hoặc muốn gộp thêm ảnh demo, just tell me!
-```
