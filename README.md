@@ -1,4 +1,4 @@
-# 🏪 Hệ Thống Quản Lý Nhà Sách (Bookstore Management System)
+# 🏪 Hệ Thống Quản Lý Nhà Sách
 
 Đây là bài tập lớn môn **Lập trình Hướng Đối Tượng (OOP)** tại Học viện Công nghệ Bưu chính Viễn thông - PTIT.  
 **Sinh viên**: Trần Đình Hào - B22DCCN278  
